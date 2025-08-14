@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from "react";
 import {
   Bar,
   BarChart,
@@ -13,39 +13,50 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-} from 'recharts';
-import reportService from '../services/reportService';
-import './ReportDashboard.css';
+} from "recharts";
+import reportService from "../services/reportService";
+import "./ReportDashboard.css";
 
 const ReportDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [sheetReport, setSheetReport] = useState(null);
   const [performanceReport, setPerformanceReport] = useState(null);
-  const [overviewReport, setOverviewReport] = useState(null);
-  const [selectedSheet, setSelectedSheet] = useState('Orders');
+  const [overviewReport] = useState(null);
+  const [selectedSheet, setSelectedSheet] = useState("Orders");
 
   // Colors for charts
-  const COLORS = ['#4285f4', '#34a853', '#ea4335', '#fbbc05', '#ff6d01', '#9c27b0'];
+  const COLORS = [
+    "#4285f4",
+    "#34a853",
+    "#ea4335",
+    "#fbbc05",
+    "#ff6d01",
+    "#9c27b0",
+  ];
 
   // Load reports khi component mount
   useEffect(() => {
     loadAllReports();
-  }, []);
+  }, [loadAllReports]);
 
   // Load tất cả reports
-  const loadAllReports = async () => {
+  const loadAllReports = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      await Promise.all([loadSheetReport(), loadPerformanceReport(), loadOverviewReport()]);
+      await Promise.all([
+        loadSheetReport(),
+        loadPerformanceReport(),
+        loadOverviewReport(),
+      ]);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Load sheet report
   const loadSheetReport = async () => {
@@ -53,7 +64,7 @@ const ReportDashboard = () => {
       const report = await reportService.generateSheetReport(selectedSheet);
       setSheetReport(report);
     } catch (err) {
-      console.error('Error loading sheet report:', err);
+      console.error("Error loading sheet report:", err);
     }
   };
 
@@ -63,7 +74,7 @@ const ReportDashboard = () => {
       const report = await reportService.generatePerformanceReport();
       setPerformanceReport(report);
     } catch (err) {
-      console.error('Error loading performance report:', err);
+      console.error("Error loading performance report:", err);
     }
   };
 
@@ -73,14 +84,14 @@ const ReportDashboard = () => {
       const report = await reportService.generateOverviewReport();
       setOverviewReport(report);
     } catch (err) {
-      console.error('Error loading overview report:', err);
+      console.error("Error loading overview report:", err);
     }
   };
 
   // Export report
   const handleExport = () => {
     if (sheetReport) {
-      const filename = `${selectedSheet}_report_${new Date().toISOString().split('T')[0]}.csv`;
+      const filename = `${selectedSheet}_report_${new Date().toISOString().split("T")[0]}.csv`;
       reportService.exportToCSV(sheetReport, filename);
     }
   };
@@ -99,7 +110,9 @@ const ReportDashboard = () => {
           <div className="stat-icon">📊</div>
           <div className="stat-content">
             <h3>Total Records</h3>
-            <p className="stat-value">{reportService.formatNumber(sheetReport.dataCount)}</p>
+            <p className="stat-value">
+              {reportService.formatNumber(sheetReport.dataCount)}
+            </p>
           </div>
         </div>
 
@@ -108,7 +121,9 @@ const ReportDashboard = () => {
             <div className="stat-icon">💰</div>
             <div className="stat-content">
               <h3>Total Revenue</h3>
-              <p className="stat-value">{reportService.formatCurrency(stats.totalRevenue)}</p>
+              <p className="stat-value">
+                {reportService.formatCurrency(stats.totalRevenue)}
+              </p>
             </div>
           </div>
         )}
@@ -118,7 +133,9 @@ const ReportDashboard = () => {
             <div className="stat-icon">📈</div>
             <div className="stat-content">
               <h3>Avg Revenue</h3>
-              <p className="stat-value">{reportService.formatCurrency(stats.avgRevenue)}</p>
+              <p className="stat-value">
+                {reportService.formatCurrency(stats.avgRevenue)}
+              </p>
             </div>
           </div>
         )}
@@ -128,7 +145,9 @@ const ReportDashboard = () => {
             <div className="stat-icon">📦</div>
             <div className="stat-content">
               <h3>Total Quantity</h3>
-              <p className="stat-value">{reportService.formatNumber(stats.totalQuantity)}</p>
+              <p className="stat-value">
+                {reportService.formatNumber(stats.totalQuantity)}
+              </p>
             </div>
           </div>
         )}
@@ -150,32 +169,42 @@ const ReportDashboard = () => {
           <div key={index} className="chart-container">
             <h3>{chart.title}</h3>
             <ResponsiveContainer width="100%" height={300}>
-              {chart.type === 'pie' ? (
+              {chart.type === "pie" ? (
                 <PieChart>
                   <Pie
                     data={chart.data}
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) =>
+                      `${name}: ${(percent * 100).toFixed(0)}%`
+                    }
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
                   >
                     {chart.data.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip />
                 </PieChart>
-              ) : chart.type === 'line' ? (
+              ) : chart.type === "line" ? (
                 <LineChart data={chart.data}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Line type="monotone" dataKey="orders" stroke="#4285f4" strokeWidth={2} />
+                  <Line
+                    type="monotone"
+                    dataKey="orders"
+                    stroke="#4285f4"
+                    strokeWidth={2}
+                  />
                 </LineChart>
               ) : (
                 <BarChart data={chart.data}>
@@ -204,9 +233,12 @@ const ReportDashboard = () => {
         <div className="performance-grid">
           <div className="performance-summary">
             <h4>Overall Status</h4>
-            <p className="total-time">Total Test Time: {performanceReport.totalTime}ms</p>
+            <p className="total-time">
+              Total Test Time: {performanceReport.totalTime}ms
+            </p>
             <p className="timestamp">
-              Last Check: {new Date(performanceReport.timestamp).toLocaleString()}
+              Last Check:{" "}
+              {new Date(performanceReport.timestamp).toLocaleString()}
             </p>
           </div>
 
@@ -214,7 +246,10 @@ const ReportDashboard = () => {
             <h4>Service Status</h4>
             <div className="services-list">
               {performanceReport.results.map((result, index) => (
-                <div key={index} className={`service-item ${result.status.toLowerCase()}`}>
+                <div
+                  key={index}
+                  className={`service-item ${result.status.toLowerCase()}`}
+                >
                   <span className="service-name">{result.service}</span>
                   <span className="service-status">{result.status}</span>
                   <span className="service-time">{result.responseTime}ms</span>
@@ -238,7 +273,10 @@ const ReportDashboard = () => {
       <div className="dashboard-controls">
         <div className="control-group">
           <label>Sheet to Analyze:</label>
-          <select value={selectedSheet} onChange={(e) => setSelectedSheet(e.target.value)}>
+          <select
+            value={selectedSheet}
+            onChange={(e) => setSelectedSheet(e.target.value)}
+          >
             <option value="Orders">Orders</option>
             <option value="Reports">Reports</option>
             <option value="Logs">Logs</option>
@@ -247,11 +285,19 @@ const ReportDashboard = () => {
         </div>
 
         <div className="action-buttons">
-          <button onClick={loadAllReports} disabled={loading} className="refresh-btn">
+          <button
+            onClick={loadAllReports}
+            disabled={loading}
+            className="refresh-btn"
+          >
             🔄 Refresh Reports
           </button>
 
-          <button onClick={handleExport} disabled={loading || !sheetReport} className="export-btn">
+          <button
+            onClick={handleExport}
+            disabled={loading || !sheetReport}
+            className="export-btn"
+          >
             📥 Export CSV
           </button>
         </div>

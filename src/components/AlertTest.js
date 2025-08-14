@@ -1,21 +1,21 @@
-import { useEffect, useState } from 'react';
-import alertService from '../services/alertService';
-import './AlertTest.css';
+import { useEffect, useState } from "react";
+import alertService from "../services/alertService";
+import "./AlertTest.css";
 
 const AlertTest = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [emailForm, setEmailForm] = useState({
-    to: '',
-    subject: '',
-    message: '',
+    to: "",
+    subject: "",
+    message: "",
   });
-  const [telegramMessage, setTelegramMessage] = useState('');
+  const [telegramMessage, setTelegramMessage] = useState("");
   const [thresholdForm, setThresholdForm] = useState({
-    value: '',
-    metric: 'sales',
-    type: 'high',
+    value: "",
+    metric: "sales",
+    type: "high",
   });
   const [alertHistory, setAlertHistory] = useState([]);
 
@@ -30,14 +30,14 @@ const AlertTest = () => {
       const history = await alertService.getAlertHistory();
       setAlertHistory(history.alerts || []);
     } catch (err) {
-      console.error('Error loading alert history:', err);
+      console.error("Error loading alert history:", err);
     }
   };
 
   // Gửi email alert
   const handleSendEmail = async () => {
     if (!emailForm.subject || !emailForm.message) {
-      setError('Please fill in subject and message');
+      setError("Please fill in subject and message");
       return;
     }
 
@@ -46,14 +46,14 @@ const AlertTest = () => {
     setSuccess(null);
 
     try {
-      const result = await alertService.sendEmailAlert(
+      await alertService.sendEmailAlert(
         emailForm.subject,
         emailForm.message,
-        emailForm.to || null,
+        emailForm.to || null
       );
 
-      setSuccess('Email sent successfully!');
-      setEmailForm({ to: '', subject: '', message: '' });
+      setSuccess("Email sent successfully!");
+      setEmailForm({ to: "", subject: "", message: "" });
       await loadAlertHistory();
     } catch (err) {
       setError(err.message);
@@ -65,7 +65,7 @@ const AlertTest = () => {
   // Gửi Telegram alert
   const handleSendTelegram = async () => {
     if (!telegramMessage.trim()) {
-      setError('Please enter a message');
+      setError("Please enter a message");
       return;
     }
 
@@ -74,9 +74,9 @@ const AlertTest = () => {
     setSuccess(null);
 
     try {
-      const result = await alertService.sendTelegramAlert(telegramMessage);
-      setSuccess('Telegram message sent successfully!');
-      setTelegramMessage('');
+      await alertService.sendTelegramAlert(telegramMessage);
+      setSuccess("Telegram message sent successfully!");
+      setTelegramMessage("");
       await loadAlertHistory();
     } catch (err) {
       setError(err.message);
@@ -88,7 +88,7 @@ const AlertTest = () => {
   // Test threshold alert
   const handleThresholdAlert = async () => {
     if (!thresholdForm.value) {
-      setError('Please enter a value');
+      setError("Please enter a value");
       return;
     }
 
@@ -100,16 +100,16 @@ const AlertTest = () => {
       const result = await alertService.checkThresholdAlert(
         parseFloat(thresholdForm.value),
         thresholdForm.metric,
-        thresholdForm.type,
+        thresholdForm.type
       );
 
       if (result.alertSent) {
         setSuccess(
-          `Threshold alert sent! Value ${result.value} exceeded threshold ${result.threshold}`,
+          `Threshold alert sent! Value ${result.value} exceeded threshold ${result.threshold}`
         );
       } else {
         setSuccess(
-          `No alert needed. Value ${result.value} is within threshold ${result.threshold}`,
+          `No alert needed. Value ${result.value} is within threshold ${result.threshold}`
         );
       }
 
@@ -128,8 +128,8 @@ const AlertTest = () => {
     setSuccess(null);
 
     try {
-      const result = await alertService.testEmailConnection();
-      setSuccess('Email connection test successful!');
+      await alertService.testEmailConnection();
+      setSuccess("Email connection test successful!");
     } catch (err) {
       setError(`Email connection test failed: ${err.message}`);
     } finally {
@@ -144,8 +144,8 @@ const AlertTest = () => {
     setSuccess(null);
 
     try {
-      const result = await alertService.testTelegramConnection();
-      setSuccess('Telegram connection test successful!');
+      await alertService.testTelegramConnection();
+      setSuccess("Telegram connection test successful!");
     } catch (err) {
       setError(`Telegram connection test failed: ${err.message}`);
     } finally {
@@ -168,8 +168,8 @@ const AlertTest = () => {
         completedOrders: 138,
       };
 
-      const result = await alertService.sendScheduledReport(reportData);
-      setSuccess('Scheduled report sent successfully!');
+      await alertService.sendScheduledReport(reportData);
+      setSuccess("Scheduled report sent successfully!");
       await loadAlertHistory();
     } catch (err) {
       setError(err.message);
@@ -189,7 +189,11 @@ const AlertTest = () => {
       <div className="test-section">
         <h3>🔧 Connection Tests</h3>
         <div className="test-buttons">
-          <button onClick={handleTestEmail} disabled={loading} className="test-btn email-test">
+          <button
+            onClick={handleTestEmail}
+            disabled={loading}
+            className="test-btn email-test"
+          >
             📧 Test Email
           </button>
           <button
@@ -211,7 +215,9 @@ const AlertTest = () => {
             <input
               type="email"
               value={emailForm.to}
-              onChange={(e) => setEmailForm({ ...emailForm, to: e.target.value })}
+              onChange={(e) =>
+                setEmailForm({ ...emailForm, to: e.target.value })
+              }
               placeholder="Leave empty to use default recipient"
             />
           </div>
@@ -221,7 +227,9 @@ const AlertTest = () => {
             <input
               type="text"
               value={emailForm.subject}
-              onChange={(e) => setEmailForm({ ...emailForm, subject: e.target.value })}
+              onChange={(e) =>
+                setEmailForm({ ...emailForm, subject: e.target.value })
+              }
               placeholder="Enter email subject"
             />
           </div>
@@ -230,7 +238,9 @@ const AlertTest = () => {
             <label>Message:</label>
             <textarea
               value={emailForm.message}
-              onChange={(e) => setEmailForm({ ...emailForm, message: e.target.value })}
+              onChange={(e) =>
+                setEmailForm({ ...emailForm, message: e.target.value })
+              }
               placeholder="Enter email message"
               rows="4"
             />
@@ -280,7 +290,9 @@ const AlertTest = () => {
               <input
                 type="number"
                 value={thresholdForm.value}
-                onChange={(e) => setThresholdForm({ ...thresholdForm, value: e.target.value })}
+                onChange={(e) =>
+                  setThresholdForm({ ...thresholdForm, value: e.target.value })
+                }
                 placeholder="Enter value to test"
               />
             </div>
@@ -290,7 +302,9 @@ const AlertTest = () => {
               <input
                 type="text"
                 value={thresholdForm.metric}
-                onChange={(e) => setThresholdForm({ ...thresholdForm, metric: e.target.value })}
+                onChange={(e) =>
+                  setThresholdForm({ ...thresholdForm, metric: e.target.value })
+                }
                 placeholder="e.g., sales, orders, inventory"
               />
             </div>
@@ -299,7 +313,9 @@ const AlertTest = () => {
               <label>Type:</label>
               <select
                 value={thresholdForm.type}
-                onChange={(e) => setThresholdForm({ ...thresholdForm, type: e.target.value })}
+                onChange={(e) =>
+                  setThresholdForm({ ...thresholdForm, type: e.target.value })
+                }
               >
                 <option value="high">High Alert</option>
                 <option value="low">Low Alert</option>

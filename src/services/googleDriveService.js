@@ -220,4 +220,5 @@ class GoogleDriveService {
   }
 }
 
-export default new GoogleDriveService();
+const googleDriveService = new GoogleDriveService();
+export default googleDriveService;

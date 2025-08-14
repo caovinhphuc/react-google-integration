@@ -97,7 +97,7 @@ Sau khi thiết lập, chạy ứng dụng:
 node server.js
 
 # Terminal 2: Frontend
-npm start
+node server.js
 ```
 
 Truy cập: http://localhost:3000
