@@ -22,7 +22,7 @@ const ReportDashboard = () => {
   const [error, setError] = useState(null);
   const [sheetReport, setSheetReport] = useState(null);
   const [performanceReport, setPerformanceReport] = useState(null);
-  const [overviewReport] = useState(null);
+  const [overviewReport, setOverviewReport] = useState(null); // eslint-disable-line no-unused-vars
   const [selectedSheet, setSelectedSheet] = useState("Orders");
 
   // Colors for charts
@@ -35,10 +35,36 @@ const ReportDashboard = () => {
     "#9c27b0",
   ];
 
-  // Load reports khi component mount
-  useEffect(() => {
-    loadAllReports();
-  }, [loadAllReports]);
+  // Load sheet report
+  const loadSheetReport = useCallback(async () => {
+    try {
+      const report = await reportService.generateSheetReport(selectedSheet);
+      setSheetReport(report);
+    } catch (err) {
+      console.error("Error loading sheet report:", err);
+    }
+  }, [selectedSheet]);
+
+  // Load performance report
+  const loadPerformanceReport = useCallback(async () => {
+    try {
+      const report = await reportService.generatePerformanceReport();
+      setPerformanceReport(report);
+    } catch (err) {
+      console.error("Error loading performance report:", err);
+    }
+  }, []);
+
+  // Load overview report
+  const loadOverviewReport = useCallback(async () => {
+    try {
+      const report = await reportService.generateOverviewReport();
+      setOverviewReport(report);
+      console.log("Overview report loaded:", report);
+    } catch (err) {
+      console.error("Error loading overview report:", err);
+    }
+  }, []);
 
   // Load tất cả reports
   const loadAllReports = useCallback(async () => {
@@ -56,37 +82,12 @@ const ReportDashboard = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [loadSheetReport, loadPerformanceReport, loadOverviewReport]);
 
-  // Load sheet report
-  const loadSheetReport = async () => {
-    try {
-      const report = await reportService.generateSheetReport(selectedSheet);
-      setSheetReport(report);
-    } catch (err) {
-      console.error("Error loading sheet report:", err);
-    }
-  };
-
-  // Load performance report
-  const loadPerformanceReport = async () => {
-    try {
-      const report = await reportService.generatePerformanceReport();
-      setPerformanceReport(report);
-    } catch (err) {
-      console.error("Error loading performance report:", err);
-    }
-  };
-
-  // Load overview report
-  const loadOverviewReport = async () => {
-    try {
-      const report = await reportService.generateOverviewReport();
-      setOverviewReport(report);
-    } catch (err) {
-      console.error("Error loading overview report:", err);
-    }
-  };
+  // Load reports khi component mount
+  useEffect(() => {
+    loadAllReports();
+  }, [loadAllReports]);
 
   // Export report
   const handleExport = () => {
