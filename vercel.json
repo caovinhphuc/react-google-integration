@@ -1,7 +1,17 @@
 {
   "version": 2,
-  "buildCommand": "npm install && npm run build",
+  "framework": "create-react-app",
+  "buildCommand": "npm run build",
   "outputDirectory": "build",
-  "framework": null,
-  "installCommand": "npm install"
+  "installCommand": "npm install",
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
 }
