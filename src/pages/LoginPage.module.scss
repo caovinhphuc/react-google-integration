@@ -5,7 +5,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #ff6b35 0%, #ff9500 100%);
   padding: 20px;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -130,9 +130,9 @@
 
     &:focus {
       outline: none;
-      border-color: #667eea;
+      border-color: #ff6b35;
       background: white;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
     }
 
     &::placeholder {
@@ -224,14 +224,14 @@
 .forgotPassword {
   background: none;
   border: none;
-  color: #667eea;
+  color: #ff6b35;
   font-size: 14px;
   cursor: pointer;
   text-decoration: underline;
   transition: color 0.2s ease;
 
   &:hover:not(:disabled) {
-    color: #5a6fd8;
+    color: #e55a2b;
   }
 
   &:disabled {
@@ -249,6 +249,27 @@
 
 .submitButton {
   width: 100%;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ff6b35 0%, #ff9500 100%);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #e55a2b 0%, #e6850e 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
 }
 
 .quickActions {
@@ -294,14 +315,14 @@
   .signupLink {
     background: none;
     border: none;
-    color: #667eea;
+    color: #ff6b35;
     font-weight: 600;
     cursor: pointer;
     text-decoration: underline;
     transition: color 0.2s ease;
 
     &:hover:not(:disabled) {
-      color: #5a6fd8;
+      color: #e55a2b;
     }
 
     &:disabled {

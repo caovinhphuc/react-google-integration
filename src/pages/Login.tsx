@@ -223,191 +223,181 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className={styles.loginPage}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <div className={styles.logo}>
-            <h1>📊 MIA.vn</h1>
-            <p>Quản lý kinh doanh thông minh</p>
-          </div>
-          <h2>Chào mừng trở lại!</h2>
-          <p>Đăng nhập để tiếp tục quản lý doanh nghiệp của bạn</p>
+      <div className={styles.header}>
+        <div className={styles.logo}>
+          <h1>📊 MIA.vn</h1>
+          <p>Quản lý kinh doanh thông minh</p>
+        </div>
+        <h2>Chào mừng trở lại!</h2>
+        <p>Đăng nhập để tiếp tục quản lý doanh nghiệp của bạn</p>
 
-          {/* Server Status Indicator */}
-          <div className={`${styles.serverStatus} ${styles[serverStatus]}`}>
-            {serverStatus === "checking" && (
-              <>
-                ⚙️ <span>Đang kiểm tra kết nối...</span>
-              </>
-            )}
-            {serverStatus === "online" && (
-              <>
-                ✅ <span>Kết nối server thành công</span>
-              </>
-            )}
-            {serverStatus === "offline" && (
-              <>
-                ❌ <span>Không thể kết nối server</span>
-              </>
-            )}
-          </div>
+        {/* Server Status Indicator */}
+        <div className={`${styles.serverStatus} ${styles[serverStatus]}`}>
+          {serverStatus === "checking" && (
+            <>
+              ⚙️ <span>Đang kiểm tra kết nối...</span>
+            </>
+          )}
+          {serverStatus === "online" && (
+            <>
+              ✅ <span>Kết nối server thành công</span>
+            </>
+          )}
+          {serverStatus === "offline" && (
+            <>
+              ❌ <span>Không thể kết nối server</span>
+            </>
+          )}
+        </div>
 
-          {/* Debug Test Button - Temporary */}
+        {/* Debug Test Button - Temporary */}
+        <button
+          type="button"
+          onClick={async () => {
+            console.log("🧪 Testing API from UI...");
+            try {
+              const healthCheck = await AuthService.healthCheck();
+              console.log("Health check result:", healthCheck);
+              alert(`Health Check: ${JSON.stringify(healthCheck)}`);
+            } catch (error: any) {
+              console.error("Test error:", error);
+              alert(`Error: ${error?.message || "Unknown error"}`);
+            }
+          }}
+          className={styles.debugButton}
+        >
+          🧪 Test API Connection
+        </button>
+      </div>
+
+      {/* General Error Message */}
+      {errors.general && (
+        <div className={styles.generalError}>
+          ❌ <span>{errors.general}</span>
+        </div>
+      )}
+
+      {/* Account Locked Warning */}
+      {isAccountLocked && (
+        <div className={styles.lockoutWarning}>
+          🔒{" "}
+          <span>
+            Tài khoản tạm thời bị khóa vì quá nhiều lần đăng nhập thất bại
+          </span>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className={styles.form} noValidate>
+        <div className={styles.formGroup}>
+          <label htmlFor="email">👤 Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            onBlur={() => handleFieldBlur("email")}
+            placeholder="Nhập email của bạn"
+            required
+            autoComplete="email"
+            className={errors.email ? styles.error : ""}
+            disabled={isLoading || isAccountLocked}
+            aria-describedby={errors.email ? "email-error" : undefined}
+          />
+          {errors.email && (
+            <span id="email-error" className={styles.errorText} role="alert">
+              {errors.email}
+            </span>
+          )}
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="password">🔒 Mật khẩu</label>
+          <div className={styles.passwordContainer}>
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={handlePasswordChange}
+              onBlur={() => handleFieldBlur("password")}
+              placeholder="Nhập mật khẩu"
+              required
+              autoComplete="current-password"
+              className={errors.password ? styles.error : ""}
+              disabled={isLoading || isAccountLocked}
+              aria-describedby={errors.password ? "password-error" : undefined}
+            />
+            <button
+              type="button"
+              className={styles.passwordToggle}
+              onClick={() => setShowPassword(!showPassword)}
+              title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+              disabled={isLoading || isAccountLocked}
+            >
+              {showPassword ? "🙈" : "👁️"}
+            </button>
+          </div>
+          {errors.password && (
+            <span id="password-error" className={styles.errorText} role="alert">
+              {errors.password}
+            </span>
+          )}
+        </div>
+
+        <div className={styles.formOptions}>
+          <label className={styles.checkbox}>
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              disabled={isLoading || isAccountLocked}
+            />
+            <span>Ghi nhớ đăng nhập</span>
+          </label>
           <button
             type="button"
-            onClick={async () => {
-              console.log("🧪 Testing API from UI...");
-              try {
-                const healthCheck = await AuthService.healthCheck();
-                console.log("Health check result:", healthCheck);
-                alert(`Health Check: ${JSON.stringify(healthCheck)}`);
-              } catch (error: any) {
-                console.error("Test error:", error);
-                alert(`Error: ${error?.message || "Unknown error"}`);
-              }
-            }}
-            className={styles.debugButton}
+            className={styles.forgotPassword}
+            disabled={isLoading || isAccountLocked}
           >
-            🧪 Test API Connection
+            Quên mật khẩu?
           </button>
         </div>
 
-        {/* General Error Message */}
-        {errors.general && (
-          <div className={styles.generalError}>
-            ❌ <span>{errors.general}</span>
-          </div>
-        )}
+        <div className={styles.actionButtons}>
+          <button
+            type="submit"
+            className={styles.submitButton}
+            disabled={isLoading || isAccountLocked}
+          >
+            {isLoading ? "Đang đăng nhập..." : "Đăng Nhập"}
+          </button>
 
-        {/* Account Locked Warning */}
-        {isAccountLocked && (
-          <div className={styles.lockoutWarning}>
-            🔒{" "}
-            <span>
-              Tài khoản tạm thời bị khóa vì quá nhiều lần đăng nhập thất bại
-            </span>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className={styles.form} noValidate>
-          <div className={styles.formGroup}>
-            <label htmlFor="email">👤 Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              onBlur={() => handleFieldBlur("email")}
-              placeholder="Nhập email của bạn"
-              required
-              autoComplete="email"
-              className={errors.email ? styles.error : ""}
-              disabled={isLoading || isAccountLocked}
-              aria-describedby={errors.email ? "email-error" : undefined}
-            />
-            {errors.email && (
-              <span id="email-error" className={styles.errorText} role="alert">
-                {errors.email}
-              </span>
-            )}
-          </div>
-
-          <div className={styles.formGroup}>
-            <label htmlFor="password">🔒 Mật khẩu</label>
-            <div className={styles.passwordContainer}>
-              <input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={handlePasswordChange}
-                onBlur={() => handleFieldBlur("password")}
-                placeholder="Nhập mật khẩu"
-                required
-                autoComplete="current-password"
-                className={errors.password ? styles.error : ""}
-                disabled={isLoading || isAccountLocked}
-                aria-describedby={
-                  errors.password ? "password-error" : undefined
-                }
-              />
-              <button
-                type="button"
-                className={styles.passwordToggle}
-                onClick={() => setShowPassword(!showPassword)}
-                title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                disabled={isLoading || isAccountLocked}
-              >
-                {showPassword ? "🙈" : "👁️"}
-              </button>
-            </div>
-            {errors.password && (
-              <span
-                id="password-error"
-                className={styles.errorText}
-                role="alert"
-              >
-                {errors.password}
-              </span>
-            )}
-          </div>
-
-          <div className={styles.formOptions}>
-            <label className={styles.checkbox}>
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                disabled={isLoading || isAccountLocked}
-              />
-              <span>Ghi nhớ đăng nhập</span>
-            </label>
+          <div className={styles.quickActions}>
             <button
               type="button"
-              className={styles.forgotPassword}
+              className={styles.clearButton}
+              onClick={clearForm}
               disabled={isLoading || isAccountLocked}
+              title="Xóa form"
             >
-              Quên mật khẩu?
+              ✖️ Xóa
             </button>
           </div>
+        </div>
+      </form>
 
-          <div className={styles.actionButtons}>
-            <button
-              type="submit"
-              className={styles.submitButton}
-              disabled={isLoading || isAccountLocked}
-            >
-              {isLoading ? "Đang đăng nhập..." : "Đăng Nhập"}
-            </button>
-
-            <div className={styles.quickActions}>
-              <button
-                type="button"
-                className={styles.clearButton}
-                onClick={clearForm}
-                disabled={isLoading || isAccountLocked}
-                title="Xóa form"
-              >
-                ✖️ Xóa
-              </button>
-            </div>
-          </div>
-
-          <div className={styles.footer}>
-            <p>
-              Chưa có tài khoản?{" "}
-              <button
-                type="button"
-                className={styles.signupLink}
-                disabled={isLoading}
-              >
-                Đăng ký ngay
-              </button>
-            </p>
-            <p className={styles.securityNote}>
-              🔒 Bảo mật với mã hóa SSL 256-bit
-            </p>
-          </div>
-        </form>
+      <div className={styles.footer}>
+        <p>
+          Chưa có tài khoản?{" "}
+          <button
+            type="button"
+            className={styles.signupLink}
+            disabled={isLoading}
+          >
+            Đăng ký ngay
+          </button>
+        </p>
+        <p className={styles.securityNote}>🔒 Bảo mật với mã hóa SSL 256-bit</p>
       </div>
     </div>
   );
