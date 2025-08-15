@@ -6,6 +6,9 @@ import GoogleDriveTest from "./components/GoogleDriveTest";
 import GoogleSheetsTest from "./components/GoogleSheetsTest";
 import ReportDashboard from "./components/ReportDashboard";
 import DocumentationRedirect from "./components/DocumentationRedirect";
+import LoginPage from "./pages/Login.tsx";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { validateConfig } from "./config/googleConfig";
 // import "./services/mockApiService"; // Load mock API for static hosting
 
@@ -283,7 +286,30 @@ function App() {
           }
         />
 
-        {/* Main app route */}
+        {/* Authentication routes */}
+        <Route path="/login" element={<LoginPage />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Legacy main app route (redirects to dashboard if authenticated) */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Fallback for old routes */}
         <Route path="/*" element={<MainApp />} />
       </Routes>
     </Router>

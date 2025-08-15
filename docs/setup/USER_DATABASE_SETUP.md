@@ -10,8 +10,8 @@
 
 ### 2️⃣ **Cấu trúc dữ liệu (Header Row A1:F1)**
 
-| A | B | C | D | E | F |
-|---|---|---|---|---|---|
+| A         | B            | C            | D        | E               | F          |
+| --------- | ------------ | ------------ | -------- | --------------- | ---------- |
 | **Email** | **Password** | **FullName** | **Role** | **Permissions** | **Status** |
 
 ### 3️⃣ **Dữ liệu mẫu (Từ row 2 trở đi)**
@@ -28,25 +28,30 @@
 ### 4️⃣ **Giải thích các cột:**
 
 #### **A. Email** (String)
+
 - Địa chỉ email để đăng nhập
 - Phải unique (không trùng lặp)
 - Sử dụng làm username
 
 #### **B. Password** (String)
+
 - Mật khẩu plain text (demo purposes)
 - **🔒 Lưu ý bảo mật**: Trong production nên hash passwords
 
 #### **C. FullName** (String)
+
 - Tên đầy đủ của user
 - Hiển thị trong UI sau khi login
 
 #### **D. Role** (String)
+
 - `admin`: Toàn quyền
 - `manager`: Quản lý + xem dữ liệu
 - `user`: Sử dụng cơ bản
 - `viewer`: Chỉ xem
 
 #### **E. Permissions** (Comma-separated String)
+
 - `read`: Xem dữ liệu
 - `write`: Tạo/sửa dữ liệu
 - `delete`: Xóa dữ liệu
@@ -54,6 +59,7 @@
 - `admin`: Admin functions
 
 #### **F. Status** (String)
+
 - `active`: Tài khoản hoạt động
 - `inactive`: Tài khoản bị tạm khóa
 - `pending`: Chờ kích hoạt
@@ -61,10 +67,12 @@
 ## 🛡️ **Security Best Practices**
 
 ### ✅ **Hiện tại (Demo)**
+
 - Plain text passwords trong Google Sheets
 - Phù hợp cho demo và development
 
 ### 🔒 **Production Recommendations**
+
 1. **Hash passwords** với bcrypt hoặc tương tự
 2. **JWT tokens** cho session management
 3. **Rate limiting** cho login attempts
@@ -74,18 +82,21 @@
 ## 🎯 **Test Users để thử nghiệm**
 
 ### Admin Account
+
 - **Email**: `admin@company.com`
 - **Password**: `admin123`
 - **Role**: admin
 - **Permissions**: Full access
 
 ### Regular User
+
 - **Email**: `user@company.com`
 - **Password**: `user123`
 - **Role**: user
 - **Permissions**: Basic access
 
 ### Viewer Only
+
 - **Email**: `viewer@company.com`
 - **Password**: `view123`
 - **Role**: viewer
@@ -94,6 +105,7 @@
 ## 🔧 **Cập nhật Backend**
 
 Backend đã được cấu hình để:
+
 1. Đọc từ sheet "Users" (range A2:F1000)
 2. So sánh email (case-insensitive)
 3. Kiểm tra password
