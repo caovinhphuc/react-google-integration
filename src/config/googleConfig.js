@@ -12,7 +12,7 @@ const googleConfig = {
   // API endpoints
   api_base_url:
     process.env.REACT_APP_API_BASE_URL ||
-    "https://your-backend-url.railway.app/api",
+    "https://react-google-backend.onrender.com/api",
 
   // Alert thresholds
   alert_threshold_low:
