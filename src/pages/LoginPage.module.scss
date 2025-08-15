@@ -5,26 +5,112 @@
 .loginPageWrapper {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
   background: linear-gradient(135deg, #ff6b35 0%, #ff9500 100%);
-  padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+// Left Sidebar Styles
+.leftSidebar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: white;
+}
+
+.companyBranding {
+  max-width: 500px;
+  text-align: left;
+}
+
+.brandLogo {
+  margin-bottom: 3rem;
+  
+  h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    font-weight: 300;
+  }
+}
+
+.featuresList {
+  margin-bottom: 3rem;
+}
+
+.feature {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(5px);
+  }
+}
+
+.featureIcon {
+  font-size: 2rem;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.featureContent {
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: white;
+  }
+  
+  p {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    line-height: 1.4;
+    margin: 0;
+  }
+}
+
+.companyTagline {
+  text-align: center;
+  
+  p {
+    font-size: 1.1rem;
+    font-style: italic;
+    opacity: 0.9;
+    font-weight: 300;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    border-left: 4px solid rgba(255, 255, 255, 0.3);
+  }
+}
+
+// Right Side - Login Form
 .loginCard {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
-  border-radius: 20px;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    0 15px 12px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   padding: 2.5rem;
   width: 100%;
-  max-width: 420px;
+  max-width: 450px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation: fadeInUp 0.6s ease-out;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .loginPage {
@@ -509,18 +595,52 @@
 // Responsive Improvements
 @include mobile {
   .loginPageWrapper {
-    padding: 1rem;
+    flex-direction: column;
+    padding: 0;
+  }
+  
+  .leftSidebar {
+    padding: 2rem 1rem;
+    text-align: center;
+    
+    .brandLogo {
+      margin-bottom: 2rem;
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      p {
+        font-size: 1rem;
+      }
+    }
+    
+    .featuresList {
+      display: none; // Ẩn trên mobile để tiết kiệm không gian
+    }
+    
+    .companyTagline {
+      margin-bottom: 1rem;
+      
+      p {
+        font-size: 0.9rem;
+        padding: 1rem;
+      }
+    }
   }
   
   .loginCard {
     padding: 1.5rem;
-    border-radius: 16px;
     max-width: 100%;
+    min-height: auto;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
   }
   
   .loginPage {
     max-width: 100%;
   }
+}
 
   .header {
     margin-bottom: 1.5rem;
@@ -544,11 +664,6 @@
       font-size: 16px; // Prevent zoom on iOS
     }
   }
-
-
-
-
-}
 
 // Dark mode support (if implemented)
 @media (prefers-color-scheme: dark) {
