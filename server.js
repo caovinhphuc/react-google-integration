@@ -138,6 +138,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'healthy',
     timestamp: new Date().toISOString(),
+    version: '2.0-auth',
     services: {
       sheets: !!process.env.REACT_APP_GOOGLE_CLIENT_EMAIL,
       email: !!transporter,
