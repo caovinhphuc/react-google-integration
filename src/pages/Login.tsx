@@ -1,22 +1,31 @@
 // src/pages/LoginPage.tsx
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/atoms/Button';
-import { Icon } from '../components/atoms/Icon';
-import AuthService from '../services/authService';
-import styles from './LoginPage.module.scss';
+import React, { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../components/atoms/Button";
+import { Icon } from "../components/atoms/Icon";
+import AuthService from "../services/authService";
+import styles from "./LoginPage.module.scss";
 
 const LoginPage: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({});
-  const [touched, setTouched] = useState<{ email?: boolean; password?: boolean }>({});
+  const [errors, setErrors] = useState<{
+    email?: string;
+    password?: string;
+    general?: string;
+  }>({});
+  const [touched, setTouched] = useState<{
+    email?: boolean;
+    password?: boolean;
+  }>({});
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [isAccountLocked, setIsAccountLocked] = useState(false);
-  const [serverStatus, setServerStatus] = useState<'checking' | 'online' | 'offline'>('checking');
+  const [serverStatus, setServerStatus] = useState<
+    "checking" | "online" | "offline"
+  >("checking");
   const navigate = useNavigate();
 
   // Check authentication status on mount
@@ -27,30 +36,32 @@ const LoginPage: React.FC = () => {
         if (AuthService.isAuthenticated() && !AuthService.isSessionExpired()) {
           const user = AuthService.getCurrentUser();
           if (user) {
-            navigate('/dashboard');
+            navigate("/dashboard");
             return;
           }
         }
 
         // Check server status
         const healthCheck = await AuthService.healthCheck();
-        setServerStatus(healthCheck.status === 'healthy' ? 'online' : 'offline');
+        setServerStatus(
+          healthCheck.status === "healthy" ? "online" : "offline"
+        );
       } catch {
-        setServerStatus('offline');
+        setServerStatus("offline");
       }
     };
 
     // Check local lockout status
-    const attempts = parseInt(localStorage.getItem('loginAttempts') || '0');
-    const lockoutTime = localStorage.getItem('lockoutTime');
+    const attempts = parseInt(localStorage.getItem("loginAttempts") || "0");
+    const lockoutTime = localStorage.getItem("lockoutTime");
 
     if (lockoutTime && Date.now() < parseInt(lockoutTime)) {
       setIsAccountLocked(true);
       setLoginAttempts(attempts);
     } else {
       // Clear lockout if time has passed
-      localStorage.removeItem('lockoutTime');
-      localStorage.removeItem('loginAttempts');
+      localStorage.removeItem("lockoutTime");
+      localStorage.removeItem("loginAttempts");
     }
 
     checkAuthStatus();
@@ -58,24 +69,24 @@ const LoginPage: React.FC = () => {
 
   // Real-time validation
   const validateField = useCallback(
-    (field: 'email' | 'password', value: string) => {
+    (field: "email" | "password", value: string) => {
       const newErrors = { ...errors };
 
-      if (field === 'email') {
+      if (field === "email") {
         if (!value) {
-          newErrors.email = 'Email là bắt buộc';
+          newErrors.email = "Email là bắt buộc";
         } else if (!/\S+@\S+\.\S+/.test(value)) {
-          newErrors.email = 'Email không hợp lệ';
+          newErrors.email = "Email không hợp lệ";
         } else {
           delete newErrors.email;
         }
       }
 
-      if (field === 'password') {
+      if (field === "password") {
         if (!value) {
-          newErrors.password = 'Mật khẩu là bắt buộc';
+          newErrors.password = "Mật khẩu là bắt buộc";
         } else if (value.length < 6) {
-          newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+          newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
         } else {
           delete newErrors.password;
         }
@@ -83,22 +94,23 @@ const LoginPage: React.FC = () => {
 
       setErrors(newErrors);
     },
-    [errors],
+    [errors]
   );
 
   const validateForm = () => {
-    const newErrors: { email?: string; password?: string; general?: string } = {};
+    const newErrors: { email?: string; password?: string; general?: string } =
+      {};
 
     if (!email) {
-      newErrors.email = 'Email là bắt buộc';
+      newErrors.email = "Email là bắt buộc";
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = 'Email không hợp lệ';
+      newErrors.email = "Email không hợp lệ";
     }
 
     if (!password) {
-      newErrors.password = 'Mật khẩu là bắt buộc';
+      newErrors.password = "Mật khẩu là bắt buộc";
     } else if (password.length < 6) {
-      newErrors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+      newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
     }
 
     setErrors(newErrors);
@@ -111,10 +123,10 @@ const LoginPage: React.FC = () => {
       setEmail(value);
 
       if (touched.email) {
-        validateField('email', value);
+        validateField("email", value);
       }
     },
-    [touched.email, validateField],
+    [touched.email, validateField]
   );
 
   const handlePasswordChange = useCallback(
@@ -123,30 +135,32 @@ const LoginPage: React.FC = () => {
       setPassword(value);
 
       if (touched.password) {
-        validateField('password', value);
+        validateField("password", value);
       }
     },
-    [touched.password, validateField],
+    [touched.password, validateField]
   );
 
   const handleFieldBlur = useCallback(
-    (field: 'email' | 'password') => {
+    (field: "email" | "password") => {
       setTouched((prev) => ({ ...prev, [field]: true }));
 
-      if (field === 'email') {
-        validateField('email', email);
+      if (field === "email") {
+        validateField("email", email);
       } else {
-        validateField('password', password);
+        validateField("password", password);
       }
     },
-    [email, password, validateField],
+    [email, password, validateField]
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (isAccountLocked) {
-      setErrors({ general: 'Tài khoản đã bị khóa tạm thời. Vui lòng thử lại sau 15 phút.' });
+      setErrors({
+        general: "Tài khoản đã bị khóa tạm thời. Vui lòng thử lại sau 15 phút.",
+      });
       return;
     }
 
@@ -164,23 +178,26 @@ const LoginPage: React.FC = () => {
       if (result.success && result.user) {
         // Successful login
         // Clear login attempts
-        localStorage.removeItem('loginAttempts');
-        localStorage.removeItem('lockoutTime');
+        localStorage.removeItem("loginAttempts");
+        localStorage.removeItem("lockoutTime");
 
         // Navigate to dashboard
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
         // Failed login
         const newAttempts = loginAttempts + 1;
         setLoginAttempts(newAttempts);
-        localStorage.setItem('loginAttempts', newAttempts.toString());
+        localStorage.setItem("loginAttempts", newAttempts.toString());
 
         if (newAttempts >= 5) {
           // Lock account for 15 minutes
           const lockoutTime = Date.now() + 15 * 60 * 1000;
-          localStorage.setItem('lockoutTime', lockoutTime.toString());
+          localStorage.setItem("lockoutTime", lockoutTime.toString());
           setIsAccountLocked(true);
-          setErrors({ general: 'Quá nhiều lần đăng nhập thất bại. Tài khoản đã bị khóa 15 phút.' });
+          setErrors({
+            general:
+              "Quá nhiều lần đăng nhập thất bại. Tài khoản đã bị khóa 15 phút.",
+          });
         } else {
           setErrors({
             general:
@@ -190,44 +207,36 @@ const LoginPage: React.FC = () => {
         }
       }
     } catch (error) {
-      console.error('Login error:', error);
-      setErrors({ general: 'Có lỗi xảy ra. Vui lòng thử lại sau.' });
+      console.error("Login error:", error);
+      setErrors({ general: "Có lỗi xảy ra. Vui lòng thử lại sau." });
     } finally {
       setIsLoading(false);
     }
   };
 
   const clearForm = () => {
-    setEmail('');
-    setPassword('');
+    setEmail("");
+    setPassword("");
     setErrors({});
     setTouched({});
   };
 
-  const fillDemoCredentials = (role: 'admin' | 'user' | 'viewer') => {
+  const fillDemoCredentials = (role: "admin" | "user" | "viewer") => {
     const credentials = {
-      admin: { email: 'admin@company.com', password: 'admin123' },
-      user: { email: 'user@company.com', password: 'user123' },
-      viewer: { email: 'viewer@company.com', password: 'view123' }
+      admin: { email: "admin@company.com", password: "admin123" },
+      user: { email: "user@company.com", password: "user123" },
+      viewer: { email: "viewer@company.com", password: "view123" },
     };
-    
+
     setEmail(credentials[role].email);
     setPassword(credentials[role].password);
     setRememberMe(true);
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'linear-gradient(135deg, #ff6b35 0%, #ff9500 100%)',
-      padding: '20px',
-      fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif'
-    }}>
-      <div className={styles.loginPage}>
+    <div className={styles.loginPageWrapper}>
+      <div className={styles.loginCard}>
+        <div className={styles.loginPage}>
         <div className={styles.header}>
           <div className={styles.logo}>
             <h1>🏢 MIA.vn</h1>
@@ -237,21 +246,21 @@ const LoginPage: React.FC = () => {
 
           {/* Server Status Indicator */}
           <div className={`${styles.serverStatus} ${styles[serverStatus]}`}>
-            {serverStatus === 'checking' && (
+            {serverStatus === "checking" && (
               <>
-                <Icon name="settings" size={12} />
+                <Icon name="settings" size={12} color="#856404" />
                 <span>Đang kiểm tra kết nối...</span>
               </>
             )}
-            {serverStatus === 'online' && (
+            {serverStatus === "online" && (
               <>
-                <Icon name="view" size={12} />
+                <Icon name="view" size={12} color="#155724" />
                 <span>Kết nối server thành công</span>
               </>
             )}
-            {serverStatus === 'offline' && (
+            {serverStatus === "offline" && (
               <>
-                <Icon name="close" size={12} />
+                <Icon name="close" size={12} color="#721c24" />
                 <span>Không thể kết nối server</span>
               </>
             )}
@@ -261,14 +270,14 @@ const LoginPage: React.FC = () => {
           <button
             type="button"
             onClick={async () => {
-              console.log('🧪 Testing API from UI...');
+              console.log("🧪 Testing API from UI...");
               try {
                 const healthCheck = await AuthService.healthCheck();
-                console.log('Health check result:', healthCheck);
+                console.log("Health check result:", healthCheck);
                 alert(`Health Check: ${JSON.stringify(healthCheck)}`);
               } catch (error: any) {
-                console.error('Test error:', error);
-                alert(`Error: ${error?.message || 'Unknown error'}`);
+                console.error("Test error:", error);
+                alert(`Error: ${error?.message || "Unknown error"}`);
               }
             }}
             className={styles.debugButton}
@@ -283,60 +292,73 @@ const LoginPage: React.FC = () => {
           <div className={styles.demoInfo}>
             <div className={styles.demoItem}>
               <span>Admin:</span>
-              <code onClick={() => fillDemoCredentials('admin')} style={{cursor: 'pointer'}}>
+              <code
+                onClick={() => fillDemoCredentials("admin")}
+                style={{ cursor: "pointer" }}
+              >
                 admin@company.com / admin123
               </code>
             </div>
             <div className={styles.demoItem}>
               <span>User:</span>
-              <code onClick={() => fillDemoCredentials('user')} style={{cursor: 'pointer'}}>
+              <code
+                onClick={() => fillDemoCredentials("user")}
+                style={{ cursor: "pointer" }}
+              >
                 user@company.com / user123
               </code>
             </div>
             <div className={styles.demoItem}>
               <span>Viewer:</span>
-              <code onClick={() => fillDemoCredentials('viewer')} style={{cursor: 'pointer'}}>
+              <code
+                onClick={() => fillDemoCredentials("viewer")}
+                style={{ cursor: "pointer" }}
+              >
                 viewer@company.com / view123
               </code>
             </div>
           </div>
-          <p className={styles.demoNote}>💡 Nhấn vào credentials để tự động điền</p>
+          <p className={styles.demoNote}>
+            💡 Nhấn vào credentials để tự động điền
+          </p>
         </div>
 
         {/* General Error Message */}
         {errors.general && (
-          <div className={styles.generalError}>
-            <Icon name="close" size={16} />
-            <span>{errors.general}</span>
-          </div>
+                  <div className={styles.generalError}>
+          <Icon name="close" size={16} color="#dc3545" />
+          <span>{errors.general}</span>
+        </div>
         )}
 
         {/* Account Locked Warning */}
         {isAccountLocked && (
-          <div className={styles.lockoutWarning}>
-            <Icon name="settings" size={16} />
-            <span>Tài khoản tạm thời bị khóa vì quá nhiều lần đăng nhập thất bại</span>
-          </div>
+                  <div className={styles.lockoutWarning}>
+          <Icon name="settings" size={16} color="#856404" />
+          <span>
+            Tài khoản tạm thời bị khóa vì quá nhiều lần đăng nhập thất bại
+          </span>
+        </div>
         )}
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>
           <div className={styles.formGroup}>
-            <label htmlFor="email">
-              <Icon name="people" size={16} />
-              Email
-            </label>
+                      <label htmlFor="email">
+            <Icon name="people" size={16} color="#666" />
+            Email
+          </label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={handleEmailChange}
-              onBlur={() => handleFieldBlur('email')}
+              onBlur={() => handleFieldBlur("email")}
               placeholder="Nhập email của bạn"
               required
               autoComplete="email"
-              className={errors.email ? styles.error : ''}
+              className={errors.email ? styles.error : ""}
               disabled={isLoading || isAccountLocked}
-              aria-describedby={errors.email ? 'email-error' : undefined}
+              aria-describedby={errors.email ? "email-error" : undefined}
             />
             {errors.email && (
               <span id="email-error" className={styles.errorText} role="alert">
@@ -346,37 +368,43 @@ const LoginPage: React.FC = () => {
           </div>
 
           <div className={styles.formGroup}>
-            <label htmlFor="password">
-              <Icon name="settings" size={16} />
-              Mật khẩu
-            </label>
+                      <label htmlFor="password">
+            <Icon name="settings" size={16} color="#666" />
+            Mật khẩu
+          </label>
             <div className={styles.passwordContainer}>
               <input
                 id="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={handlePasswordChange}
-                onBlur={() => handleFieldBlur('password')}
+                onBlur={() => handleFieldBlur("password")}
                 placeholder="Nhập mật khẩu"
                 required
                 autoComplete="current-password"
-                className={errors.password ? styles.error : ''}
+                className={errors.password ? styles.error : ""}
                 disabled={isLoading || isAccountLocked}
-                aria-describedby={errors.password ? 'password-error' : undefined}
+                aria-describedby={
+                  errors.password ? "password-error" : undefined
+                }
               />
               <button
                 type="button"
                 className={styles.passwordToggle}
                 onClick={() => setShowPassword(!showPassword)}
-                title={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-                aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                 disabled={isLoading || isAccountLocked}
               >
-                <Icon name={showPassword ? 'close' : 'view'} size={16} />
+                                 <Icon name={showPassword ? "close" : "view"} size={16} color="#999" />
               </button>
             </div>
             {errors.password && (
-              <span id="password-error" className={styles.errorText} role="alert">
+              <span
+                id="password-error"
+                className={styles.errorText}
+                role="alert"
+              >
                 {errors.password}
               </span>
             )}
@@ -403,49 +431,94 @@ const LoginPage: React.FC = () => {
 
           <div className={styles.actionButtons}>
             <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              loading={isLoading}
-              className={styles.submitButton}
-              disabled={isLoading || isAccountLocked}
+                          type="submit"
+            variant="primary"
+            size="lg"
+            loading={isLoading}
+            className={styles.submitButton}
+            disabled={isLoading || isAccountLocked}
+            onClick={() => {}}
             >
-              {isLoading ? 'Đang đăng nhập...' : 'Đăng Nhập'}
+              {isLoading ? "Đang đăng nhập..." : "Đăng Nhập"}
             </Button>
 
             <div className={styles.quickActions}>
               <button
                 type="button"
                 className={styles.demoButton}
-                onClick={() => fillDemoCredentials('admin')}
+                onClick={() => fillDemoCredentials("admin")}
                 disabled={isLoading || isAccountLocked}
                 title="Điền thông tin admin demo"
               >
                 👨‍💼 Demo Admin
               </button>
-              <button
-                type="button"
-                className={styles.clearButton}
-                onClick={clearForm}
-                disabled={isLoading || isAccountLocked}
-                title="Xóa form"
-              >
-                <Icon name="close" size={16} />
-                Xóa
-              </button>
+                          <button
+              type="button"
+              className={styles.clearButton}
+              onClick={clearForm}
+              disabled={isLoading || isAccountLocked}
+              title="Xóa form"
+            >
+              <Icon name="close" size={16} color="#666" />
+              Xóa
+            </button>
+            
+            {/* Demo Credentials Section */}
+            <div className={styles.demoCredentials}>
+              <p><strong>🧪 Demo Credentials:</strong></p>
+              <div className={styles.demoInfo}>
+                <div className={styles.demoItem}>
+                  <span>Admin:</span>
+                  <code
+                    onClick={() => fillDemoCredentials("admin")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    admin@company.com / admin123
+                  </code>
+                </div>
+                <div className={styles.demoItem}>
+                  <span>User:</span>
+                  <code
+                    onClick={() => fillDemoCredentials("user")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    user@company.com / user123
+                  </code>
+                </div>
+                <div className={styles.demoItem}>
+                  <span>Viewer:</span>
+                  <code
+                    onClick={() => fillDemoCredentials("viewer")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    viewer@company.com / view123
+                  </code>
+                </div>
+              </div>
+              <p className={styles.demoNote}>
+                💡 Nhấn vào credentials để tự động điền
+              </p>
             </div>
+          </div>
           </div>
 
           <div className={styles.footer}>
             <p>
-              Chưa có tài khoản?{' '}
-              <button type="button" className={styles.signupLink} disabled={isLoading}>
+              Chưa có tài khoản?{" "}
+              <button
+                type="button"
+                className={styles.signupLink}
+                disabled={isLoading}
+              >
                 Đăng ký ngay
               </button>
             </p>
-            <p className={styles.securityNote}>🔒 Bảo mật với mã hóa SSL 256-bit</p>
-          </div>
-        </form>
+            <p className={styles.securityNote}>
+              🔒 Bảo mật với mã hóa SSL 256-bit
+            </p>
+                  </div>
+      </form>
+        </div>
       </div>
     </div>
   );
