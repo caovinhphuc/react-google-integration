@@ -84,15 +84,18 @@ app.get('/api/health', (req, res) => {
 // Read sheet
 app.post('/api/sheets/read', async (req, res) => {
   try {
-    const { spreadsheetId, range } = req.body;
+    const { spreadsheetId, range, sheetName } = req.body;
 
     if (!spreadsheetId || !range) {
       return res.status(400).json({ error: 'spreadsheetId and range are required' });
     }
 
+    // Use sheetName if provided, otherwise use range as-is
+    const fullRange = sheetName ? `${sheetName}!${range}` : range;
+
     const response = await sheets.spreadsheets.values.get({
       spreadsheetId,
-      range,
+      range: fullRange,
     });
 
     res.json({

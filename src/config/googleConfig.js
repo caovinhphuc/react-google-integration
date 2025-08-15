@@ -11,7 +11,8 @@ const googleConfig = {
 
   // API endpoints
   api_base_url:
-    process.env.REACT_APP_API_BASE_URL || "http://localhost:3001/api",
+    process.env.REACT_APP_API_BASE_URL ||
+    "https://your-backend-url.railway.app/api",
 
   // Alert thresholds
   alert_threshold_low:

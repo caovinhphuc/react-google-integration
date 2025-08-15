@@ -5,6 +5,7 @@ import GoogleDriveTest from "./components/GoogleDriveTest";
 import GoogleSheetsTest from "./components/GoogleSheetsTest";
 import ReportDashboard from "./components/ReportDashboard";
 import { validateConfig } from "./config/googleConfig";
+// import "./services/mockApiService"; // Load mock API for static hosting
 
 function App() {
   const [activeTab, setActiveTab] = useState("sheets");

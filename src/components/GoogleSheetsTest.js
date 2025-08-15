@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import googleSheetsService from '../services/googleSheetsService';
-import './GoogleSheetsTest.css';
+import { useEffect, useState } from "react";
+import googleSheetsService from "../services/googleSheetsService";
+import "./GoogleSheetsTest.css";
 
 const GoogleSheetsTest = () => {
   const [sheetData, setSheetData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [sheetName, setSheetName] = useState('Orders');
-  const [range, setRange] = useState('A1:Z100');
-  const [newData, setNewData] = useState('');
+  const [sheetName, setSheetName] = useState("Orders");
+  const [range, setRange] = useState("A1:Z100");
+  const [newData, setNewData] = useState("");
   const [spreadsheetInfo, setSpreadsheetInfo] = useState(null);
 
   // Đọc dữ liệu từ sheet
@@ -28,7 +28,7 @@ const GoogleSheetsTest = () => {
   // Ghi dữ liệu vào sheet
   const handleWriteSheet = async () => {
     if (!newData.trim()) {
-      setError('Please enter data to write');
+      setError("Please enter data to write");
       return;
     }
 
@@ -37,12 +37,16 @@ const GoogleSheetsTest = () => {
     try {
       // Parse CSV data
       const rows = googleSheetsService.parseCSVData(newData);
-      const result = await googleSheetsService.writeSheet(sheetName, 'A1', rows);
-      console.log('Write result:', result);
+      const result = await googleSheetsService.writeSheet(
+        sheetName,
+        "A1",
+        rows
+      );
+      console.log("Write result:", result);
 
       // Refresh data
       await handleReadSheet();
-      setNewData('');
+      setNewData("");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -53,7 +57,7 @@ const GoogleSheetsTest = () => {
   // Thêm dữ liệu vào cuối sheet
   const handleAppendSheet = async () => {
     if (!newData.trim()) {
-      setError('Please enter data to append');
+      setError("Please enter data to append");
       return;
     }
 
@@ -62,11 +66,11 @@ const GoogleSheetsTest = () => {
     try {
       const rows = googleSheetsService.parseCSVData(newData);
       const result = await googleSheetsService.appendSheet(sheetName, rows);
-      console.log('Append result:', result);
+      console.log("Append result:", result);
 
       // Refresh data
       await handleReadSheet();
-      setNewData('');
+      setNewData("");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -76,14 +80,14 @@ const GoogleSheetsTest = () => {
 
   // Tạo sheet mới
   const handleCreateSheet = async () => {
-    const newSheetName = prompt('Enter new sheet name:');
+    const newSheetName = prompt("Enter new sheet name:");
     if (!newSheetName) return;
 
     setLoading(true);
     setError(null);
     try {
       const result = await googleSheetsService.createSheet(newSheetName);
-      console.log('Create sheet result:', result);
+      console.log("Create sheet result:", result);
       await getSpreadsheetInfo();
     } catch (err) {
       setError(err.message);
@@ -139,7 +143,8 @@ const GoogleSheetsTest = () => {
           </table>
         </div>
         <p className="data-info">
-          Rows: {sheetData.values.length - 1} | Columns: {sheetData.values[0]?.length || 0}
+          Rows: {sheetData.values.length - 1} | Columns:{" "}
+          {sheetData.values[0]?.length || 0}
         </p>
       </div>
     );
@@ -160,8 +165,8 @@ const GoogleSheetsTest = () => {
             <strong>Title:</strong> {spreadsheetInfo.properties?.title}
           </p>
           <p>
-            <strong>Sheets:</strong>{' '}
-            {spreadsheetInfo.sheets?.map((s) => s.properties.title).join(', ')}
+            <strong>Sheets:</strong>{" "}
+            {spreadsheetInfo.sheets?.map((s) => s.properties.title).join(", ")}
           </p>
           <button onClick={getSpreadsheetInfo} disabled={loading}>
             🔄 Refresh Info
@@ -211,10 +216,16 @@ const GoogleSheetsTest = () => {
           rows="5"
         />
         <div className="input-buttons">
-          <button onClick={handleWriteSheet} disabled={loading || !newData.trim()}>
+          <button
+            onClick={handleWriteSheet}
+            disabled={loading || !newData.trim()}
+          >
             ✏️ Write Data (Replace)
           </button>
-          <button onClick={handleAppendSheet} disabled={loading || !newData.trim()}>
+          <button
+            onClick={handleAppendSheet}
+            disabled={loading || !newData.trim()}
+          >
             ➕ Append Data
           </button>
         </div>
