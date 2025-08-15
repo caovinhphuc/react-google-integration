@@ -1,319 +1,114 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import AlertTest from "./components/AlertTest";
-import GoogleDriveTest from "./components/GoogleDriveTest";
-import GoogleSheetsTest from "./components/GoogleSheetsTest";
-import ReportDashboard from "./components/ReportDashboard";
+
+// Layout Components
+import Header from "./components/layout/Header";
+import Navigation from "./components/layout/Navigation";
+import Footer from "./components/layout/Footer";
+import TabContent from "./components/common/TabContent";
+import ConfigWarning from "./components/common/ConfigWarning";
+import ErrorBoundary from "./components/common/ErrorBoundary";
+import LoadingSpinner from "./components/common/LoadingSpinner";
+
+// Page Components
 import DocumentationRedirect from "./components/DocumentationRedirect";
 import LoginPage from "./pages/Login.tsx";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { validateConfig } from "./config/googleConfig";
-// import "./services/mockApiService"; // Load mock API for static hosting
 
-function MainApp() {
+// Custom Hooks
+import { useConfigValidation } from "./hooks/useConfigValidation";
+
+// Documentation routes configuration
+const DOC_ROUTES = [
+  { path: "/README.md", redirectPath: "README.md" },
+  { path: "/QUICK_SETUP.md", redirectPath: "docs/setup/QUICK_SETUP.md" },
+  {
+    path: "/PROJECT_SUMMARY.md",
+    redirectPath: "docs/project/PROJECT_SUMMARY.md",
+  },
+  {
+    path: "/PROJECT_COMPLETE.md",
+    redirectPath: "docs/project/PROJECT_COMPLETE.md",
+  },
+  { path: "/DEPLOYMENT.md", redirectPath: "docs/guides/DEPLOYMENT.md" },
+  { path: "/docs/README.md", redirectPath: "docs/README.md" },
+  { path: "/docs/setup/*", redirectPath: "docs/setup/QUICK_SETUP.md" },
+  { path: "/docs/guides/*", redirectPath: "docs/guides/DEPLOYMENT.md" },
+  { path: "/docs/project/*", redirectPath: "docs/project/PROJECT_SUMMARY.md" },
+];
+
+// Main App Component (Tab-based interface)
+const MainApp = () => {
   const [activeTab, setActiveTab] = useState("sheets");
-  const [configValid, setConfigValid] = useState(false);
+  const { configValid, isLoading } = useConfigValidation();
 
-  // Check config khi component mount
-  React.useEffect(() => {
-    const isValid = validateConfig();
-    setConfigValid(isValid);
-  }, []);
+  if (isLoading) {
+    return <LoadingSpinner message="Checking configuration..." />;
+  }
 
-  // Render config warning
-  const renderConfigWarning = () => {
-    if (configValid) return null;
+  return (
+    <ErrorBoundary>
+      <div className="App">
+        <Header />
 
-    return (
-      <div className="config-warning">
-        <div className="warning-content">
-          <h3>⚠️ Configuration Required</h3>
-          <p>
-            Please configure your environment variables before using the
-            application. Copy <code>.env.example</code> to <code>.env</code> and
-            fill in your Google credentials.
-          </p>
-          <div className="warning-links">
-            <a
-              href="https://github.com/caovinhphuc/react-google-integration/blob/main/docs/setup/QUICK_SETUP.md"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              📋 Quick Setup Guide
-            </a>
-            <a
-              href="https://github.com/caovinhphuc/react-google-integration/blob/main/README.md"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              📚 Full Documentation
-            </a>
-          </div>
-        </div>
+        {!configValid && <ConfigWarning />}
+
+        <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+
+        <TabContent activeTab={activeTab} />
+
+        <Footer configValid={configValid} />
       </div>
-    );
-  };
-
-  // Render tab content
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case "sheets":
-        return <GoogleSheetsTest />;
-      case "drive":
-        return <GoogleDriveTest />;
-      case "alerts":
-        return <AlertTest />;
-      case "reports":
-        return <ReportDashboard />;
-      default:
-        return <GoogleSheetsTest />;
-    }
-  };
-
-  return (
-    <div className="App">
-      {/* Header */}
-      <header className="app-header">
-        <div className="header-content">
-          <h1>🚀 React Google Integration</h1>
-          <p>Comprehensive Google Services Integration Platform</p>
-        </div>
-      </header>
-
-      {/* Configuration Warning */}
-      {renderConfigWarning()}
-
-      {/* Navigation Tabs */}
-      <nav className="app-nav">
-        <div className="nav-container">
-          <button
-            className={`nav-tab ${activeTab === "sheets" ? "active" : ""}`}
-            onClick={() => setActiveTab("sheets")}
-          >
-            📊 Google Sheets
-          </button>
-          <button
-            className={`nav-tab ${activeTab === "drive" ? "active" : ""}`}
-            onClick={() => setActiveTab("drive")}
-          >
-            💾 Google Drive
-          </button>
-          <button
-            className={`nav-tab ${activeTab === "alerts" ? "active" : ""}`}
-            onClick={() => setActiveTab("alerts")}
-          >
-            🚨 Alerts
-          </button>
-          <button
-            className={`nav-tab ${activeTab === "reports" ? "active" : ""}`}
-            onClick={() => setActiveTab("reports")}
-          >
-            📈 Reports
-          </button>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <main className="app-main">{renderTabContent()}</main>
-
-      {/* Footer */}
-      <footer className="app-footer">
-        <div className="footer-content">
-          <div className="footer-section">
-            <h4>🔗 Quick Links</h4>
-            <ul>
-              <li>
-                <a
-                  href="https://console.cloud.google.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google Cloud Console
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://sheets.google.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google Sheets
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://drive.google.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Google Drive
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://myaccount.google.com/apppasswords"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Gmail App Passwords
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="footer-section">
-            <h4>📚 Documentation</h4>
-            <ul>
-              <li>
-                <a
-                  href="https://github.com/caovinhphuc/react-google-integration/blob/main/README.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Full Setup Guide
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/caovinhphuc/react-google-integration/blob/main/docs/README.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Documentation Index
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/caovinhphuc/react-google-integration/blob/main/docs/setup/QUICK_SETUP.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Quick Setup
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/caovinhphuc/react-google-integration/blob/main/docs/project/PROJECT_SUMMARY.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Project Summary
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div className="footer-section">
-            <h4>🛠️ Features</h4>
-            <ul>
-              <li>Google Sheets Integration</li>
-              <li>Google Drive Management</li>
-              <li>Email & Telegram Alerts</li>
-              <li>Automated Reports</li>
-            </ul>
-          </div>
-
-          <div className="footer-section">
-            <h4>ℹ️ Status</h4>
-            <div className="status-indicators">
-              <div className={`status-item ${configValid ? "ok" : "error"}`}>
-                <span className="status-dot"></span>
-                Configuration: {configValid ? "OK" : "Needs Setup"}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          <p>
-            &copy; 2024 React Google Integration. Built with React, Express, and
-            Google APIs.
-          </p>
-        </div>
-      </footer>
-    </div>
+    </ErrorBoundary>
   );
-}
+};
 
-// Main App component with Router
-function App() {
+// Main App Component with Router
+const App = () => {
   return (
-    <Router>
-      <Routes>
-        {/* Documentation routes - redirect to GitHub */}
-        <Route
-          path="/README.md"
-          element={<DocumentationRedirect path="README.md" />}
-        />
-        <Route
-          path="/QUICK_SETUP.md"
-          element={<DocumentationRedirect path="docs/setup/QUICK_SETUP.md" />}
-        />
-        <Route
-          path="/PROJECT_SUMMARY.md"
-          element={
-            <DocumentationRedirect path="docs/project/PROJECT_SUMMARY.md" />
-          }
-        />
-        <Route
-          path="/PROJECT_COMPLETE.md"
-          element={
-            <DocumentationRedirect path="docs/project/PROJECT_COMPLETE.md" />
-          }
-        />
-        <Route
-          path="/DEPLOYMENT.md"
-          element={<DocumentationRedirect path="docs/guides/DEPLOYMENT.md" />}
-        />
-        <Route
-          path="/docs/README.md"
-          element={<DocumentationRedirect path="docs/README.md" />}
-        />
-        <Route
-          path="/docs/setup/*"
-          element={<DocumentationRedirect path="docs/setup/QUICK_SETUP.md" />}
-        />
-        <Route
-          path="/docs/guides/*"
-          element={<DocumentationRedirect path="docs/guides/DEPLOYMENT.md" />}
-        />
-        <Route
-          path="/docs/project/*"
-          element={
-            <DocumentationRedirect path="docs/project/PROJECT_SUMMARY.md" />
-          }
-        />
+    <ErrorBoundary>
+      <Router>
+        <Routes>
+          {/* Documentation routes - redirect to GitHub */}
+          {DOC_ROUTES.map(({ path, redirectPath }) => (
+            <Route
+              key={path}
+              path={path}
+              element={<DocumentationRedirect path={redirectPath} />}
+            />
+          ))}
 
-        {/* Authentication routes */}
-        <Route path="/login" element={<LoginPage />} />
+          {/* Authentication routes */}
+          <Route path="/login" element={<LoginPage />} />
 
-        {/* Protected routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+          {/* Protected routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Legacy main app route (redirects to dashboard if authenticated) */}
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+          {/* Legacy main app route (redirects to dashboard if authenticated) */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Fallback for old routes */}
-        <Route path="/*" element={<MainApp />} />
-      </Routes>
-    </Router>
+          {/* Fallback for old routes */}
+          <Route path="/*" element={<MainApp />} />
+        </Routes>
+      </Router>
+    </ErrorBoundary>
   );
-}
+};
 
 export default App;
