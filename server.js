@@ -64,10 +64,79 @@ const addToAlertHistory = (type, subject, message) => {
 
 // Routes
 
-// Health check
+// Authentication endpoint
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: 'Email và mật khẩu là bắt buộc'
+      });
+    }
+
+    // Đọc dữ liệu user từ Google Sheets
+    // Giả sử có sheet "Users" với cột: Email | Password | FullName | Role | Permissions
+    const userSheetResponse = await sheets.spreadsheets.values.get({
+      spreadsheetId: process.env.REACT_APP_GOOGLE_SHEET_ID,
+      range: 'Users!A2:F1000', // Bỏ qua header row
+    });
+
+    const users = userSheetResponse.data.values || [];
+    
+    // Tìm user với email khớp
+    const userRow = users.find(row => row[0] && row[0].toLowerCase() === email.toLowerCase());
+    
+    if (!userRow) {
+      return res.status(401).json({
+        success: false,
+        error: 'Email không tồn tại trong hệ thống'
+      });
+    }
+
+    // Kiểm tra password (trong thực tế nên hash password)
+    const storedPassword = userRow[1];
+    if (password !== storedPassword) {
+      return res.status(401).json({
+        success: false,
+        error: 'Mật khẩu không chính xác'
+      });
+    }
+
+    // Tạo user object
+    const user = {
+      email: userRow[0],
+      fullName: userRow[2] || 'User',
+      role: userRow[3] || 'user',
+      permissions: userRow[4] ? userRow[4].split(',').map(p => p.trim()) : [],
+      lastLogin: new Date().toISOString()
+    };
+
+    // Log login activity (optional)
+    console.log(`User logged in: ${email} at ${new Date().toISOString()}`);
+
+    res.json({
+      success: true,
+      user: user,
+      message: 'Đăng nhập thành công',
+      token: `user_${Date.now()}_${Math.random().toString(36).substring(2)}`
+    });
+
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Lỗi server khi xử lý đăng nhập',
+      details: error.message
+    });
+  }
+});
+
+// Health check (updated to include authentication status)
 app.get('/api/health', (req, res) => {
   res.json({
-    status: 'OK',
+    status: 'healthy',
     timestamp: new Date().toISOString(),
     services: {
       sheets: !!process.env.REACT_APP_GOOGLE_CLIENT_EMAIL,
@@ -75,6 +144,7 @@ app.get('/api/health', (req, res) => {
       telegram: !!(
         process.env.REACT_APP_TELEGRAM_BOT_TOKEN && process.env.REACT_APP_TELEGRAM_CHAT_ID
       ),
+      authentication: true
     },
   });
 });
