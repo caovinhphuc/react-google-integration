@@ -23,29 +23,37 @@
 
 ```
 react-google-integration/
-├── src/
-│   ├── components/          # React components
+├── src/                    # Frontend React application
+│   ├── components/         # React components
 │   │   ├── GoogleSheetsTest.js
 │   │   ├── GoogleDriveTest.js
 │   │   ├── AlertTest.js
 │   │   └── ReportDashboard.js
-│   ├── services/           # Business logic services
+│   ├── services/          # API services
 │   │   ├── googleSheetsService.js
 │   │   ├── googleDriveService.js
 │   │   ├── alertService.js
 │   │   └── reportService.js
-│   ├── config/             # Configuration files
+│   ├── config/            # Configuration
 │   │   └── googleConfig.js
-│   ├── App.js              # Main app component
-│   ├── App.css             # Styles
-│   └── index.js            # Entry point
-├── server.js               # Backend server
-├── package.json            # Dependencies
-├── .env.example            # Environment variables template
-└── README.md               # This file
+│   ├── App.js             # Main app component
+│   └── index.js           # Entry point
+├── docs/                  # Documentation
+│   ├── setup/             # Setup guides
+│   ├── guides/            # Usage guides  
+│   ├── project/           # Project info
+│   └── README.md          # Documentation index
+├── public/                # Static assets
+├── build/                 # Production build (generated)
+├── server.js              # Backend Express server
+├── package.json           # Dependencies & scripts
+├── .env.example           # Environment template
+└── README.md              # Main documentation
 ```
 
 ## 🚀 Hướng dẫn cài đặt
+
+> 📚 **Hướng dẫn chi tiết**: Xem [`docs/setup/QUICK_SETUP.md`](docs/setup/QUICK_SETUP.md)
 
 ### 1. Chuẩn bị Google Service Account
 
@@ -316,6 +324,13 @@ timestamp,activity,details,status
 - ✅ Restrict API keys nếu có thể
 - ✅ Regular rotation của credentials
 
+## 📚 Documentation
+
+- **[Setup Guides](docs/setup/)** - Hướng dẫn cài đặt và cấu hình
+- **[Usage Guides](docs/guides/)** - Hướng dẫn sử dụng và deployment  
+- **[Project Info](docs/project/)** - Thông tin chi tiết về dự án
+- **[Documentation Index](docs/README.md)** - Danh mục tài liệu đầy đủ
+
 ## 📞 Hỗ trợ
 
 Nếu gặp vấn đề:
@@ -324,6 +339,7 @@ Nếu gặp vấn đề:
 2. Verify các credentials
 3. Test từng service riêng biệt
 4. Kiểm tra network connectivity
+5. Tham khảo [`docs/`](docs/) cho hướng dẫn chi tiết
 
 ## 📄 License
 
