@@ -7,7 +7,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .header {
@@ -17,7 +17,7 @@
 
   .logo {
     margin-bottom: 16px;
-    
+
     h1 {
       font-size: 32px;
       margin: 0;
@@ -318,7 +318,8 @@
 }
 
 // Error Messages
-.generalError, .lockoutWarning {
+.generalError,
+.lockoutWarning {
   display: flex;
   align-items: center;
   gap: 8px;
