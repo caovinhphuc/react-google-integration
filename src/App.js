@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import AlertTest from "./components/AlertTest";
 import GoogleDriveTest from "./components/GoogleDriveTest";
 import GoogleSheetsTest from "./components/GoogleSheetsTest";
 import ReportDashboard from "./components/ReportDashboard";
+import DocumentationRedirect from "./components/DocumentationRedirect";
 import { validateConfig } from "./config/googleConfig";
 // import "./services/mockApiService"; // Load mock API for static hosting
 
-function App() {
+function MainApp() {
   const [activeTab, setActiveTab] = useState("sheets");
   const [configValid, setConfigValid] = useState(false);
 
@@ -229,6 +231,62 @@ function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+// Main App component with Router
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Documentation routes - redirect to GitHub */}
+        <Route
+          path="/README.md"
+          element={<DocumentationRedirect path="README.md" />}
+        />
+        <Route
+          path="/QUICK_SETUP.md"
+          element={<DocumentationRedirect path="docs/setup/QUICK_SETUP.md" />}
+        />
+        <Route
+          path="/PROJECT_SUMMARY.md"
+          element={
+            <DocumentationRedirect path="docs/project/PROJECT_SUMMARY.md" />
+          }
+        />
+        <Route
+          path="/PROJECT_COMPLETE.md"
+          element={
+            <DocumentationRedirect path="docs/project/PROJECT_COMPLETE.md" />
+          }
+        />
+        <Route
+          path="/DEPLOYMENT.md"
+          element={<DocumentationRedirect path="docs/guides/DEPLOYMENT.md" />}
+        />
+        <Route
+          path="/docs/README.md"
+          element={<DocumentationRedirect path="docs/README.md" />}
+        />
+        <Route
+          path="/docs/setup/*"
+          element={<DocumentationRedirect path="docs/setup/QUICK_SETUP.md" />}
+        />
+        <Route
+          path="/docs/guides/*"
+          element={<DocumentationRedirect path="docs/guides/DEPLOYMENT.md" />}
+        />
+        <Route
+          path="/docs/project/*"
+          element={
+            <DocumentationRedirect path="docs/project/PROJECT_SUMMARY.md" />
+          }
+        />
+
+        {/* Main app route */}
+        <Route path="/*" element={<MainApp />} />
+      </Routes>
+    </Router>
   );
 }
 
