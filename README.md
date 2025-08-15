@@ -2,6 +2,14 @@
 
 🚀 Ứng dụng React tích hợp Google Sheets, Google Drive với hệ thống cảnh báo và báo cáo tự động.
 
+## 🌐 Live Demo
+
+- **Frontend**: https://leafy-baklava-595711.netlify.app/
+- **Backend API**: https://react-google-backend.onrender.com
+- **GitHub Repository**: https://github.com/caovinhphuc/react-google-integration
+
+> ✨ **Hoàn toàn functional với real Google APIs!** Không phải demo data.
+
 ## ✨ Tính năng
 
 - 📊 **Google Sheets Integration**: Đọc/ghi dữ liệu, tạo sheet mới
@@ -42,6 +50,7 @@ react-google-integration/
 ### 1. Chuẩn bị Google Service Account
 
 #### Bước 1: Tạo Google Cloud Project
+
 1. Truy cập [Google Cloud Console](https://console.cloud.google.com/)
 2. Tạo project mới hoặc chọn project hiện có
 3. Enable các APIs sau:
@@ -49,12 +58,14 @@ react-google-integration/
    - Google Drive API
 
 #### Bước 2: Tạo Service Account
+
 1. Vào **IAM & Admin** > **Service Accounts**
 2. Nhấn **Create Service Account**
 3. Điền thông tin và nhấn **Create and Continue**
 4. Bỏ qua phần roles và nhấn **Done**
 
 #### Bước 3: Tạo Key cho Service Account
+
 1. Nhấn vào Service Account vừa tạo
 2. Vào tab **Keys** > **Add Key** > **Create New Key**
 3. Chọn **JSON** và nhấn **Create**
@@ -63,11 +74,13 @@ react-google-integration/
 ### 2. Chuẩn bị Google Sheets & Drive
 
 #### Google Sheets:
+
 1. Tạo Google Sheet mới
 2. Copy **Sheet ID** từ URL (phần giữa `/d/` và `/edit`)
 3. Chia sẻ Sheet với email của Service Account (với quyền Editor)
 
 #### Google Drive:
+
 1. Tạo thư mục trên Google Drive để chứa file upload
 2. Copy **Folder ID** từ URL
 3. Chia sẻ thư mục với email của Service Account (với quyền Editor)
@@ -75,6 +88,7 @@ react-google-integration/
 ### 3. Cài đặt ứng dụng
 
 #### Bước 1: Clone và cài đặt dependencies
+
 ```bash
 # Cài đặt dependencies cho frontend
 npm install
@@ -84,6 +98,7 @@ npm install express nodemailer node-cron cors dotenv
 ```
 
 #### Bước 2: Cấu hình môi trường
+
 ```bash
 # Copy file cấu hình
 cp .env.example .env
@@ -92,6 +107,7 @@ cp .env.example .env
 ```
 
 #### Bước 3: Cấu hình .env
+
 ```env
 # Google Service Account Configuration
 REACT_APP_GOOGLE_CLIENT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
@@ -139,7 +155,13 @@ REACT_APP_ALERT_THRESHOLD_HIGH=100
 
 ## 🎯 Chạy ứng dụng
 
-### Development Mode
+### Production (Đã deploy)
+
+- **Frontend**: https://leafy-baklava-595711.netlify.app/
+- **Backend**: https://react-google-backend.onrender.com
+
+### Development Mode (Local)
+
 ```bash
 # Terminal 1: Start backend server
 node server.js
@@ -148,28 +170,43 @@ node server.js
 npm start
 ```
 
-Ứng dụng sẽ chạy tại:
+Ứng dụng local sẽ chạy tại:
+
 - Frontend: http://localhost:3000
 - Backend: http://localhost:3001
+
+### 🚀 Production Deployment
+
+```bash
+# Build frontend
+npm run build
+
+# Deploy backend lên Render.com
+# Deploy frontend (build/) lên Netlify
+```
 
 ## 📖 Hướng dẫn sử dụng
 
 ### 1. Test Google Sheets
+
 - Vào tab **Google Sheets**
 - Nhấn **Kết nối Google Sheets**
 - Test các chức năng: Đọc dữ liệu, Ghi dữ liệu, Tạo sheet mới
 
 ### 2. Test Google Drive
+
 - Vào tab **Google Drive**
 - Nhấn **Kết nối Google Drive**
 - Test upload file, tạo thư mục, chia sẻ file
 
 ### 3. Test Cảnh báo
+
 - Vào tab **Cảnh báo**
 - Test gửi email và telegram
 - Test các loại cảnh báo khác nhau
 
 ### 4. Xem Báo cáo
+
 - Vào tab **Báo cáo**
 - Chọn khoảng thời gian và tạo báo cáo
 - Xem biểu đồ và thống kê
@@ -177,33 +214,44 @@ npm start
 ## 🔧 Troubleshooting
 
 ### Lỗi kết nối Google APIs
+
 ```
 Error: No key or keyFile set
 ```
+
 **Giải pháp**: Kiểm tra GOOGLE_PRIVATE_KEY trong .env, đảm bảo có `\n` thay vì xuống dòng thật.
 
 ### Lỗi gửi email
+
 ```
 Error: Invalid login
 ```
-**Giải pháp**: 
+
+**Giải pháp**:
+
 1. Kiểm tra Email và App Password
 2. Đảm bảo đã bật 2-Step Verification
 3. Sử dụng App Password thay vì password thường
 
 ### Lỗi Telegram
+
 ```
 Error: Bad Request: chat not found
 ```
-**Giải pháp**: 
+
+**Giải pháp**:
+
 1. Đảm bảo đã gửi tin nhắn cho bot trước
 2. Kiểm tra Chat ID từ getUpdates API
 
 ### Lỗi Google Sheets/Drive
+
 ```
 Error: Insufficient Permission
 ```
-**Giải pháp**: 
+
+**Giải pháp**:
+
 1. Đảm bảo đã chia sẻ Sheet/Folder với Service Account
 2. Kiểm tra quyền Editor
 3. Verify Service Account email
@@ -213,6 +261,7 @@ Error: Insufficient Permission
 Tạo sheet với cấu trúc sau để test báo cáo:
 
 ### Sheet "Orders" (A1:F):
+
 ```
 date,product,quantity,total,status,customer_id
 2024-01-01,Sản phẩm A,2,200000,completed,CUST001
@@ -221,11 +270,13 @@ date,product,quantity,total,status,customer_id
 ```
 
 ### Sheet "Reports" (A1:E):
+
 ```
 timestamp,type,statistics,summary,dateRange
 ```
 
 ### Sheet "Logs" (A1:D):
+
 ```
 timestamp,activity,details,status
 ```
@@ -233,22 +284,29 @@ timestamp,activity,details,status
 ## 🚀 Lộ trình phát triển
 
 ### Phase 1: ✅ Hoàn thành
-- [x] Google Sheets integration
-- [x] Google Drive integration
-- [x] Alert system
-- [x] Basic reporting
+
+- [x] Google Sheets integration (Real API)
+- [x] Google Drive integration (Real API)
+- [x] Alert system (Email + Telegram)
+- [x] Basic reporting with charts
+- [x] **Production deployment** (Netlify + Render)
+- [x] **Real Google APIs** thay vì demo data
+- [x] Full-stack architecture với Node.js backend
 
 ### Phase 2: 🔄 Đang phát triển
-- [ ] Advanced scheduling
-- [ ] Order management system
-- [ ] Customer management
-- [ ] Advanced analytics
+
+- [ ] Advanced scheduling với cron jobs
+- [ ] Enhanced UI/UX design
+- [ ] Performance optimization
+- [ ] Error handling improvements
 
 ### Phase 3: 📋 Kế hoạch
-- [ ] Multi-user support
-- [ ] Role-based access
-- [ ] Advanced notifications
-- [ ] Mobile app
+
+- [ ] Multi-user authentication system
+- [ ] Role-based access control
+- [ ] Advanced analytics & machine learning
+- [ ] Mobile responsive design
+- [ ] API rate limiting & caching
 
 ## 🔒 Bảo mật
 
@@ -261,6 +319,7 @@ timestamp,activity,details,status
 ## 📞 Hỗ trợ
 
 Nếu gặp vấn đề:
+
 1. Kiểm tra logs trong console
 2. Verify các credentials
 3. Test từng service riêng biệt
@@ -270,6 +329,43 @@ Nếu gặp vấn đề:
 
 MIT License - Tự do sử dụng cho mục đích học tập và phát triển.
 
+## 🎯 Tech Stack
+
+### Frontend
+
+- **React 18** - Modern React với hooks
+- **Recharts** - Biểu đồ và visualization
+- **CSS3** - Responsive design
+- **Netlify** - Static hosting & deployment
+
+### Backend
+
+- **Node.js + Express** - RESTful API server
+- **Google APIs** - Sheets v4, Drive v3, Auth Library
+- **Nodemailer** - Email service
+- **Node-cron** - Task scheduling
+- **Render.com** - Backend hosting
+
+### Integration
+
+- **Google Service Account** - Secure API authentication
+- **CORS** - Cross-origin resource sharing
+- **Environment Variables** - Secure configuration
+
+---
+
+## 🏆 Thành tựu đạt được
+
+✅ **Full-stack application** hoàn chỉnh với real Google APIs
+✅ **Production deployment** trên Netlify + Render
+✅ **Real-time data operations** với Google Sheets & Drive
+✅ **Professional alerting system** via Email & Telegram
+✅ **Beautiful dashboard** với charts và analytics
+✅ **Secure authentication** với Service Account
+✅ **Clean, maintainable code** với modern React patterns
+
 ---
 
 🎉 **Chúc bạn thành công với React Google Integration!**
+
+> 💡 **Tip**: Dự án này có thể làm foundation cho các ứng dụng business intelligence, CRM systems, hoặc automation platforms!
