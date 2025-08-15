@@ -1,8 +1,13 @@
 # 🚀 Deployment Guide
 
+> **Current Production Deployment:**
+>
+> - **Frontend**: https://leafy-baklava-595711.netlify.app/ (Netlify)
+> - **Backend**: https://react-google-backend.onrender.com (Render)
+
 ## Deployment Options
 
-### 1. 🌐 Deploy Frontend to Vercel/Netlify
+### 1. 🌐 Deploy Frontend to Netlify (Current Setup)
 
 #### Vercel Deployment
 
@@ -88,7 +93,7 @@ CMD ["node", "server.js"]
 #### Docker Compose
 
 ```yaml
-version: '3.8'
+version: "3.8"
 services:
   frontend:
     build: .
@@ -109,7 +114,45 @@ services:
       - PORT=3001
 ```
 
-### 4. 📱 Environment Variables Setup
+### 4. 🖥️ Deploy Backend to Render (Current Setup)
+
+#### Render Deployment Steps
+
+1. **Connect GitHub Repository**
+   - Go to [render.com](https://render.com)
+   - Login with GitHub
+   - "New +" → "Web Service"
+   - Connect `caovinhphuc/react-google-integration`
+
+2. **Configure Service**
+
+   ```
+   Name: react-google-backend
+   Environment: Node
+   Region: Oregon (US West)
+   Branch: main
+   Build Command: npm install
+   Start Command: node server.js
+   Instance Type: Free
+   ```
+
+3. **Environment Variables**
+   Add all variables from `.env`:
+
+   ```
+   REACT_APP_GOOGLE_CLIENT_EMAIL=your-service-account@project.iam.gserviceaccount.com
+   REACT_APP_GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----..."
+   REACT_APP_GOOGLE_PROJECT_ID=your-project-id
+   REACT_APP_GOOGLE_SHEET_ID=your-sheet-id
+   REACT_APP_GOOGLE_DRIVE_FOLDER_ID=your-folder-id
+   ```
+
+4. **Deploy & Test**
+   - Click "Create Web Service"
+   - Wait 5-10 minutes for deployment
+   - Test backend: `https://your-app.onrender.com/api/health`
+
+### 5. 📱 Environment Variables Setup
 
 For production deployment, set these environment variables:
 
@@ -150,21 +193,21 @@ REACT_APP_API_BASE_URL=https://your-backend-url.com/api
 
 ```javascript
 // Add to server.js for production
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 app.use(helmet());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
 });
-app.use('/api/', limiter);
+app.use("/api/", limiter);
 
 // Production CORS
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  optionsSuccessStatus: 200
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
+  optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
 ```
@@ -175,13 +218,13 @@ app.use(cors(corsOptions));
 
 ```javascript
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get("/health", (req, res) => {
   res.json({
-    status: 'healthy',
+    status: "healthy",
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     memory: process.memoryUsage(),
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
   });
 });
 
@@ -201,37 +244,37 @@ name: Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   deploy-frontend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18'
-    - name: Install dependencies
-      run: npm install
-    - name: Build
-      run: npm run build
-    - name: Deploy to Vercel
-      uses: amondnet/vercel-action@v20
-      with:
-        vercel-token: ${{ secrets.VERCEL_TOKEN }}
-        vercel-org-id: ${{ secrets.ORG_ID}}
-        vercel-project-id: ${{ secrets.PROJECT_ID}}
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Deploy to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.ORG_ID}}
+          vercel-project-id: ${{ secrets.PROJECT_ID}}
 
   deploy-backend:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Deploy to Railway
-      uses: badsyntax/github-action-railway@v1
-      with:
-        command: 'up'
-        railway-token: ${{ secrets.RAILWAY_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Deploy to Railway
+        uses: badsyntax/github-action-railway@v1
+        with:
+          command: "up"
+          railway-token: ${{ secrets.RAILWAY_TOKEN }}
 ```
 
 ### 8. 🚀 Quick Deploy Commands
@@ -290,4 +333,5 @@ npm run build 2>&1 | tee build.log
 ```
 
 ---
+
 🎉 **Your React Google Integration is now ready for production!**

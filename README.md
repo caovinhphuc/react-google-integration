@@ -40,7 +40,7 @@ react-google-integration/
 │   └── index.js           # Entry point
 ├── docs/                  # Documentation
 │   ├── setup/             # Setup guides
-│   ├── guides/            # Usage guides  
+│   ├── guides/            # Usage guides
 │   ├── project/           # Project info
 │   └── README.md          # Documentation index
 ├── public/                # Static assets
@@ -327,7 +327,7 @@ timestamp,activity,details,status
 ## 📚 Documentation
 
 - **[Setup Guides](docs/setup/)** - Hướng dẫn cài đặt và cấu hình
-- **[Usage Guides](docs/guides/)** - Hướng dẫn sử dụng và deployment  
+- **[Usage Guides](docs/guides/)** - Hướng dẫn sử dụng và deployment
 - **[Project Info](docs/project/)** - Thông tin chi tiết về dự án
 - **[Documentation Index](docs/README.md)** - Danh mục tài liệu đầy đủ
 

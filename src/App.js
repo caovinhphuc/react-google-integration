@@ -31,7 +31,11 @@ function App() {
             fill in your Google credentials.
           </p>
           <div className="warning-links">
-            <a href="/QUICK_SETUP.md" target="_blank" rel="noopener noreferrer">
+            <a
+              href="/docs/setup/QUICK_SETUP.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               📋 Quick Setup Guide
             </a>
             <a href="/README.md" target="_blank" rel="noopener noreferrer">
@@ -160,7 +164,16 @@ function App() {
               </li>
               <li>
                 <a
-                  href="/QUICK_SETUP.md"
+                  href="/docs/README.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Documentation Index
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/docs/setup/QUICK_SETUP.md"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -169,7 +182,7 @@ function App() {
               </li>
               <li>
                 <a
-                  href="/PROJECT_SUMMARY.md"
+                  href="/docs/project/PROJECT_SUMMARY.md"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
