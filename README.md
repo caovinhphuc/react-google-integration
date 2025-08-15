@@ -46,6 +46,7 @@ react-google-integration/
 ├── public/                # Static assets
 ├── build/                 # Production build (generated)
 ├── server.js              # Backend Express server
+├── deploy.sh              # 🚀 Quick deployment script
 ├── package.json           # Dependencies & scripts
 ├── .env.example           # Environment template
 └── README.md              # Main documentation
@@ -183,14 +184,42 @@ npm start
 - Frontend: http://localhost:3000
 - Backend: http://localhost:3001
 
-### 🚀 Production Deployment
+### 🚀 Quick Deployment (Recommended)
+
+Sử dụng script tự động để deploy nhanh:
+
+```bash
+# Deploy với commit message
+./deploy.sh "🎨 Update UI design"
+
+# Hoặc script sẽ prompt cho message
+./deploy.sh
+
+# Xem hướng dẫn
+./deploy.sh --help
+```
+
+**Script sẽ tự động:**
+- 📦 Build frontend (`npm run build`)
+- ➕ Add tất cả changes (`git add .`)
+- 💾 Commit với message
+- 🚀 Push lên GitHub (`git push origin main`)
+- ☁️ Trigger auto-deploy cho Netlify & Render
+
+### 🛠️ Manual Deployment
 
 ```bash
 # Build frontend
 npm run build
 
-# Deploy backend lên Render.com
-# Deploy frontend (build/) lên Netlify
+# Manual commit & push
+git add .
+git commit -m "Your message"
+git push origin main
+
+# Auto-deploy sẽ trigger cho:
+# - Netlify (Frontend): 3-5 phút
+# - Render (Backend): 5-10 phút
 ```
 
 ## 📖 Hướng dẫn sử dụng
@@ -324,10 +353,29 @@ timestamp,activity,details,status
 - ✅ Restrict API keys nếu có thể
 - ✅ Regular rotation của credentials
 
+## 🚀 Quick Deploy Examples
+
+```bash
+# Bug fix
+./deploy.sh "🐛 Fix login validation issue"
+
+# New feature
+./deploy.sh "✨ Add dark mode toggle"
+
+# Documentation update
+./deploy.sh "📝 Update API documentation"
+
+# UI improvements
+./deploy.sh "🎨 Improve dashboard responsiveness"
+
+# Performance optimization
+./deploy.sh "⚡ Optimize image loading speed"
+```
+
 ## 📚 Documentation
 
 - **[Setup Guides](docs/setup/)** - Hướng dẫn cài đặt và cấu hình
-- **[Usage Guides](docs/guides/)** - Hướng dẫn sử dụng và deployment
+- **[Usage Guides](docs/guides/)** - Hướng dẫn sử dụng và deployment  
 - **[Project Info](docs/project/)** - Thông tin chi tiết về dự án
 - **[Documentation Index](docs/README.md)** - Danh mục tài liệu đầy đủ
 
