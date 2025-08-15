@@ -32,13 +32,17 @@ function App() {
           </p>
           <div className="warning-links">
             <a
-              href="/docs/setup/QUICK_SETUP.md"
+              href="https://github.com/caovinhphuc/react-google-integration/blob/main/docs/setup/QUICK_SETUP.md"
               target="_blank"
               rel="noopener noreferrer"
             >
               📋 Quick Setup Guide
             </a>
-            <a href="/README.md" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://github.com/caovinhphuc/react-google-integration/blob/main/README.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               📚 Full Documentation
             </a>
           </div>
@@ -158,13 +162,17 @@ function App() {
             <h4>📚 Documentation</h4>
             <ul>
               <li>
-                <a href="/README.md" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="https://github.com/caovinhphuc/react-google-integration/blob/main/README.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Full Setup Guide
                 </a>
               </li>
               <li>
                 <a
-                  href="/docs/README.md"
+                  href="https://github.com/caovinhphuc/react-google-integration/blob/main/docs/README.md"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -173,7 +181,7 @@ function App() {
               </li>
               <li>
                 <a
-                  href="/docs/setup/QUICK_SETUP.md"
+                  href="https://github.com/caovinhphuc/react-google-integration/blob/main/docs/setup/QUICK_SETUP.md"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -182,7 +190,7 @@ function App() {
               </li>
               <li>
                 <a
-                  href="/docs/project/PROJECT_SUMMARY.md"
+                  href="https://github.com/caovinhphuc/react-google-integration/blob/main/docs/project/PROJECT_SUMMARY.md"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
