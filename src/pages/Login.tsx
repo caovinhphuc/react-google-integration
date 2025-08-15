@@ -221,17 +221,7 @@ const LoginPage: React.FC = () => {
     setTouched({});
   };
 
-  const fillDemoCredentials = (role: "admin" | "user" | "viewer") => {
-    const credentials = {
-      admin: { email: "admin@company.com", password: "admin123" },
-      user: { email: "user@company.com", password: "user123" },
-      viewer: { email: "viewer@company.com", password: "view123" },
-    };
 
-    setEmail(credentials[role].email);
-    setPassword(credentials[role].password);
-    setRememberMe(true);
-  };
 
   return (
     <div className={styles.loginPageWrapper}>
@@ -266,62 +256,10 @@ const LoginPage: React.FC = () => {
             )}
           </div>
 
-          {/* Debug Test Button - Temporary */}
-          <button
-            type="button"
-            onClick={async () => {
-              console.log("🧪 Testing API from UI...");
-              try {
-                const healthCheck = await AuthService.healthCheck();
-                console.log("Health check result:", healthCheck);
-                alert(`Health Check: ${JSON.stringify(healthCheck)}`);
-              } catch (error: any) {
-                console.error("Test error:", error);
-                alert(`Error: ${error?.message || "Unknown error"}`);
-              }
-            }}
-            className={styles.debugButton}
-          >
-            🧪 Test API Connection
-          </button>
+
         </div>
 
-        {/* Demo Credentials Section */}
-        <div className={styles.demoCredentials}>
-          <p>🎯 Tài khoản demo để test:</p>
-          <div className={styles.demoInfo}>
-            <div className={styles.demoItem}>
-              <span>Admin:</span>
-              <code
-                onClick={() => fillDemoCredentials("admin")}
-                style={{ cursor: "pointer" }}
-              >
-                admin@company.com / admin123
-              </code>
-            </div>
-            <div className={styles.demoItem}>
-              <span>User:</span>
-              <code
-                onClick={() => fillDemoCredentials("user")}
-                style={{ cursor: "pointer" }}
-              >
-                user@company.com / user123
-              </code>
-            </div>
-            <div className={styles.demoItem}>
-              <span>Viewer:</span>
-              <code
-                onClick={() => fillDemoCredentials("viewer")}
-                style={{ cursor: "pointer" }}
-              >
-                viewer@company.com / view123
-              </code>
-            </div>
-          </div>
-          <p className={styles.demoNote}>
-            💡 Nhấn vào credentials để tự động điền
-          </p>
-        </div>
+
 
         {/* General Error Message */}
         {errors.general && (
@@ -431,75 +369,16 @@ const LoginPage: React.FC = () => {
 
           <div className={styles.actionButtons}>
             <Button
-                          type="submit"
-            variant="primary"
-            size="lg"
-            loading={isLoading}
-            className={styles.submitButton}
-            disabled={isLoading || isAccountLocked}
-            onClick={() => {}}
+              type="submit"
+              variant="primary"
+              size="lg"
+              loading={isLoading}
+              className={styles.submitButton}
+              disabled={isLoading || isAccountLocked}
+              onClick={() => {}}
             >
               {isLoading ? "Đang đăng nhập..." : "Đăng Nhập"}
             </Button>
-
-            <div className={styles.quickActions}>
-              <button
-                type="button"
-                className={styles.demoButton}
-                onClick={() => fillDemoCredentials("admin")}
-                disabled={isLoading || isAccountLocked}
-                title="Điền thông tin admin demo"
-              >
-                👨‍💼 Demo Admin
-              </button>
-                          <button
-              type="button"
-              className={styles.clearButton}
-              onClick={clearForm}
-              disabled={isLoading || isAccountLocked}
-              title="Xóa form"
-            >
-              <Icon name="close" size={16} color="#666" />
-              Xóa
-            </button>
-            
-            {/* Demo Credentials Section */}
-            <div className={styles.demoCredentials}>
-              <p><strong>🧪 Demo Credentials:</strong></p>
-              <div className={styles.demoInfo}>
-                <div className={styles.demoItem}>
-                  <span>Admin:</span>
-                  <code
-                    onClick={() => fillDemoCredentials("admin")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    admin@company.com / admin123
-                  </code>
-                </div>
-                <div className={styles.demoItem}>
-                  <span>User:</span>
-                  <code
-                    onClick={() => fillDemoCredentials("user")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    user@company.com / user123
-                  </code>
-                </div>
-                <div className={styles.demoItem}>
-                  <span>Viewer:</span>
-                  <code
-                    onClick={() => fillDemoCredentials("viewer")}
-                    style={{ cursor: "pointer" }}
-                  >
-                    viewer@company.com / view123
-                  </code>
-                </div>
-              </div>
-              <p className={styles.demoNote}>
-                💡 Nhấn vào credentials để tự động điền
-              </p>
-            </div>
-          </div>
           </div>
 
           <div className={styles.footer}>
