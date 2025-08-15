@@ -1,8 +1,8 @@
 // src/pages/LoginPage.tsx
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button } from "../components/atoms/Button";
-import { Icon } from "../components/atoms/Icon";
+// import { Button } from "../components/atoms/Button";
+// import { Icon } from "../components/atoms/Icon";
 import AuthService from "../services/authService";
 import styles from "./LoginPage.module.scss";
 
