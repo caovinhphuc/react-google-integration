@@ -84,10 +84,10 @@ app.post('/api/auth/login', async (req, res) => {
     });
 
     const users = userSheetResponse.data.values || [];
-    
+
     // Tìm user với email khớp
     const userRow = users.find(row => row[0] && row[0].toLowerCase() === email.toLowerCase());
-    
+
     if (!userRow) {
       return res.status(401).json({
         success: false,
@@ -131,6 +131,26 @@ app.post('/api/auth/login', async (req, res) => {
       details: error.message
     });
   }
+});
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: "🚀 React Google Integration API",
+    version: "2.0-auth",
+    status: "running",
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: "/api/health",
+      sheets: "/api/sheets/*",
+      drive: "/api/drive/*",
+      alerts: "/api/alerts/*",
+      reports: "/api/reports/*",
+      auth: "/api/auth/*"
+    },
+    documentation: "https://github.com/caovinhphuc/react-google-integration",
+    frontend: "https://leafy-baklava-595711.netlify.app/"
+  });
 });
 
 // Health check (updated to include authentication status)
