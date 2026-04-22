@@ -4,9 +4,9 @@
 
 ## 🌐 Live Demo
 
-- **Frontend**: https://leafy-baklava-595711.netlify.app/
-- **Backend API**: https://react-google-backend.onrender.com
-- **GitHub Repository**: https://github.com/caovinhphuc/react-google-integration
+- **Frontend**: <https://leafy-baklava-595711.netlify.app/>
+- **Backend API**: <https://react-google-backend.onrender.com>
+- **GitHub Repository**: <https://github.com/caovinhphuc/react-google-integration>
 
 > ✨ **Hoàn toàn functional với real Google APIs!** Không phải demo data.
 
@@ -82,13 +82,13 @@ react-google-integration/
 
 ### 2. Chuẩn bị Google Sheets & Drive
 
-#### Google Sheets:
+#### Google Sheets
 
 1. Tạo Google Sheet mới
 2. Copy **Sheet ID** từ URL (phần giữa `/d/` và `/edit`)
 3. Chia sẻ Sheet với email của Service Account (với quyền Editor)
 
-#### Google Drive:
+#### Google Drive
 
 1. Tạo thư mục trên Google Drive để chứa file upload
 2. Copy **Folder ID** từ URL
@@ -166,8 +166,8 @@ REACT_APP_ALERT_THRESHOLD_HIGH=100
 
 ### Production (Đã deploy)
 
-- **Frontend**: https://leafy-baklava-595711.netlify.app/
-- **Backend**: https://react-google-backend.onrender.com
+- **Frontend**: <https://leafy-baklava-595711.netlify.app/>
+- **Backend**: <https://react-google-backend.onrender.com>
 
 ### Development Mode (Local)
 
@@ -181,8 +181,8 @@ npm start
 
 Ứng dụng local sẽ chạy tại:
 
-- Frontend: http://localhost:3000
-- Backend: http://localhost:3001
+- Frontend: <http://localhost:3000>
+- Backend: <http://localhost:3001>
 
 ### 🚀 Quick Deployment (Recommended)
 
@@ -200,6 +200,7 @@ Sử dụng script tự động để deploy nhanh:
 ```
 
 **Script sẽ tự động:**
+
 - 📦 Build frontend (`npm run build`)
 - ➕ Add tất cả changes (`git add .`)
 - 💾 Commit với message
@@ -297,7 +298,7 @@ Error: Insufficient Permission
 
 Tạo sheet với cấu trúc sau để test báo cáo:
 
-### Sheet "Orders" (A1:F):
+### Sheet "Orders" (A1:F)
 
 ```
 date,product,quantity,total,status,customer_id
@@ -306,13 +307,13 @@ date,product,quantity,total,status,customer_id
 2024-01-03,Sản phẩm A,3,300000,completed,CUST003
 ```
 
-### Sheet "Reports" (A1:E):
+### Sheet "Reports" (A1:E)
 
 ```
 timestamp,type,statistics,summary,dateRange
 ```
 
-### Sheet "Logs" (A1:D):
+### Sheet "Logs" (A1:D)
 
 ```
 timestamp,activity,details,status
@@ -375,7 +376,7 @@ timestamp,activity,details,status
 ## 📚 Documentation
 
 - **[Setup Guides](docs/setup/)** - Hướng dẫn cài đặt và cấu hình
-- **[Usage Guides](docs/guides/)** - Hướng dẫn sử dụng và deployment  
+- **[Usage Guides](docs/guides/)** - Hướng dẫn sử dụng và deployment
 - **[Project Info](docs/project/)** - Thông tin chi tiết về dự án
 - **[Documentation Index](docs/README.md)** - Danh mục tài liệu đầy đủ
 
